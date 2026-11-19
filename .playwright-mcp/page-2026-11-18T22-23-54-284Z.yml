@@ -1,0 +1,40 @@
+- generic [ref=e2]:
+  - region "About Fluvio" [ref=e3]:
+    - heading "Fluvio" [level=1] [ref=e12]
+    - paragraph [ref=e13]: Know where your money goes.
+    - paragraph [ref=e14]: Simple tracking for everyday spending. Private, on your device.
+    - list [ref=e15]:
+      - listitem [ref=e16]: See purchases, bills, and cash in one place.
+      - listitem [ref=e17]: Spot repeat subscriptions before they cost you.
+      - listitem [ref=e18]: Your data stays on your device.
+    - group "Screen size" [ref=e19]:
+      - button "Mobile" [pressed] [ref=e20] [cursor=pointer]
+      - button "Tablet" [ref=e21] [cursor=pointer]
+    - paragraph [ref=e22]: Demo only. All names, banks, and amounts are fictional.
+  - region "Fluvio app preview" [ref=e23]:
+    - generic [aria-hidden]:
+      - generic: 4:23 PM
+    - iframe [ref=e25]:
+      - generic [ref=f1e10]:
+        - generic [ref=f1e16]:
+          - generic [ref=f1e17]:
+            - generic [ref=f1e18]:
+              - generic [ref=f1e19]: Good afternoon
+              - heading "Your money today" [level=1] [ref=f1e20]
+              - generic [ref=f1e21]: Wednesday, November 18
+              - generic "Demo data" [ref=f1e22]: DEMO
+            - button "Account and settings for Fluvio" [ref=f1e25] [cursor=pointer]:
+              - generic [ref=f1e26]: F
+          - 'generic "Total logged: $0.00. 0 purchases. Your own records on this device, not a bank balance." [ref=f1e27]':
+            - generic [ref=f1e28]:
+              - generic [ref=f1e29]: Total spent
+              - button "Hide amounts" [ref=f1e30] [cursor=pointer]
+            - generic [ref=f1e34]: $0.00
+            - generic [ref=f1e35]: 0 purchases · Not your bank balance
+          - heading "Recent purchases" [level=1] [ref=f1e37]
+          - progressbar "Loading activity" [ref=f1e38]
+        - tablist [ref=f1e44]:
+          - tab "Home" [ref=f1e45] [cursor=pointer]
+          - tab "Activity" [ref=f1e49] [cursor=pointer]
+          - tab "Insights" [ref=f1e53] [cursor=pointer]
+          - tab "Accounts" [ref=f1e57] [cursor=pointer]

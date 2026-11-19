@@ -1,0 +1,31 @@
+- generic [ref=f4e89]:
+  - generic [ref=f4e90]:
+    - generic [ref=f4e98]:
+      - generic [ref=f4e100]:
+        - generic [ref=f4e101]:
+          - generic [ref=f4e102]: Good evening
+          - generic [ref=f4e103]: November 2026
+        - button [ref=f4e104] [cursor=pointer]
+      - generic [ref=f4e107]:
+        - generic [ref=f4e108]: TOTAL SPENT
+        - generic [ref=f4e109]: $0.00
+        - generic [ref=f4e110]: 0 transactions
+      - generic [ref=f4e112]: Recent
+      - generic [ref=f4e114]:
+        - generic [ref=f4e118]: No expenses yet
+        - generic [ref=f4e119]: Tap + to add your first expense
+    - generic [ref=f4e124]:
+      - heading "Welcome to SpendSmart" [level=1] [ref=f4e128]
+      - generic [ref=f4e129]: Your AI-powered expense tracker. Let's personalize your experience.
+      - generic [ref=f4e130]: WHAT'S YOUR NAME?
+      - textbox "Your name" [active] [ref=f4e134]:
+        - /placeholder: First Name
+      - generic [ref=f4e135]:
+        - button "Get started" [disabled]:
+          - generic [ref=f4e138]: Get Started
+      - generic [ref=f4e139]: Your data stays private on your device 🔒
+  - tablist [ref=f4e141]:
+    - tab "Home" [ref=f4e143] [cursor=pointer]
+    - tab "Stats" [ref=f4e156] [cursor=pointer]
+    - tab "Insights" [ref=f4e170] [cursor=pointer]
+    - tab "Profile" [ref=f4e183] [cursor=pointer]

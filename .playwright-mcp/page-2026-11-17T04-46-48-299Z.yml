@@ -1,0 +1,22 @@
+- generic [ref=e4]:
+  - generic [ref=e10]:
+    - generic [ref=e11]: Favorites
+    - generic [ref=e14]:
+      - generic [ref=e15]: 
+      - generic [ref=e16]: No favorites starred yet.
+  - tablist [ref=e18]:
+    - tab "  Favorites" [selected] [ref=e20] [cursor=pointer]:
+      - generic [ref=e21]:
+        - generic [ref=e22]: 
+        - generic [ref=e24]: 
+      - generic [ref=e26]: Favorites
+    - tab "  Categories" [ref=e28] [cursor=pointer]:
+      - generic [ref=e29]:
+        - generic [ref=e30]: 
+        - generic [ref=e32]: 
+      - generic [ref=e34]: Categories
+    - tab "  Settings" [ref=e36] [cursor=pointer]:
+      - generic [ref=e37]:
+        - generic [ref=e38]: 
+        - generic [ref=e40]: 
+      - generic [ref=e42]: Settings

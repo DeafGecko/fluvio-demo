@@ -1,0 +1,11 @@
+- region "About Fluvio" [ref=e3]:
+  - heading "Fluvio" [level=1] [ref=e12]
+  - paragraph [ref=e13]: Know where your money goes.
+  - paragraph [ref=e14]: Simple tracking for everyday spending. Private, on your device.
+  - list [ref=e15]:
+    - listitem [ref=e16]: See purchases, bills, and cash in one place.
+    - listitem [ref=e17]: Spot repeat subscriptions before they cost you.
+    - listitem [ref=e18]: Your data stays on your device.
+  - link "Open full screen" [ref=e19] [cursor=pointer]:
+    - /url: /
+  - paragraph [ref=e20]: Demo only. All names, banks, and amounts are fictional.

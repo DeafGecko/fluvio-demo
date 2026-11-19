@@ -1,0 +1,1 @@
+if(location.pathname==="/welcome"){document.getElementById("boot-title").textContent="Welcome to Fluvio";document.getElementById("boot-tag").textContent="See where your money goes. Everything here is pretend, so nothing is connected to a real bank.";}

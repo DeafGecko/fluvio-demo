@@ -1,0 +1,33 @@
+- generic [ref=e4]:
+  - generic:
+    - generic:
+      - generic:
+        - generic:
+          - generic:
+            - generic:
+              - generic [ref=e5]:
+                - generic:
+                  - generic:
+                    - generic: Good afternoon
+                    - heading "Your money today" [level=1]
+                    - generic: Wednesday, November 18
+                    - generic "Demo data" [ref=e6]: DEMO
+                  - button "Account and settings for Fluvio" [ref=e9] [cursor=pointer]:
+                    - generic [ref=e10]: F
+                - 'generic "Total logged: $0.00. 0 purchases. Your own records on this device, not a bank balance." [ref=e11]':
+                  - generic:
+                    - generic [ref=e12]: Total spent
+                    - button "Hide amounts" [ref=e13] [cursor=pointer]
+                  - generic: $0.00
+                  - generic: 0 purchases · Not your bank balance
+                - heading "Recent purchases" [level=1] [ref=e17]
+                - progressbar "Loading activity"
+              - tablist [ref=e22]:
+                - tab "Home":
+                  - img [ref=e23] [cursor=pointer]
+                - tab "Activity":
+                  - img [ref=e26] [cursor=pointer]
+                - tab "Insights":
+                  - img [ref=e29] [cursor=pointer]
+                - tab "Accounts":
+                  - img [ref=e32] [cursor=pointer]

@@ -1,0 +1,15 @@
+# Runs on every push and pull request: installs exactly what the lockfile says,
+# fails if high or critical vulnerabilities exist, and runs the unit tests.
+name: security
+on: [push, pull_request]
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: npm ci
+      - run: npm audit --audit-level=high
+      - run: npx vitest run
