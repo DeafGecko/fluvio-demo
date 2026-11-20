@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react';
 import { Animated, PanResponder, Pressable, StyleSheet, Text, View } from 'react-native';
 import { EllipsisVerticalIcon, PencilSquareIcon, TrashIcon } from 'react-native-heroicons/outline';
-import { minTarget, radius, spacing } from '../constants/tokens';
+import { minTarget, radius, spacing, rem, font } from '../constants/tokens';
 import { useTheme } from '../hooks/use-theme';
 
 // A row that slides left to reveal Edit and Delete behind it.
@@ -45,10 +45,10 @@ export function SwipeRow({ children, onEdit, onDelete, label }: Props) {
     wrap: { borderRadius: radius.md, overflow: 'hidden', marginBottom: spacing[2] },
     // The action layer fills the whole row behind the card, so no page color shows at the card's rounded corners.
     actions: { position: 'absolute', top: 0, bottom: 0, left: 0, right: 0, flexDirection: 'row', justifyContent: 'flex-end', backgroundColor: c.surface, borderRadius: radius.md, overflow: 'hidden' },
-    action: { width: REVEAL / 2, alignItems: 'center', justifyContent: 'center', gap: 4 },
-    actionText: { color: c.onAccent, fontSize: 13, fontWeight: '700' },
+    action: { width: REVEAL / 2, alignItems: 'center', justifyContent: 'center', gap: rem(0.25) },
+    actionText: { color: c.onAccent, fontSize: font(0.8125), fontWeight: '700' },
     front: { backgroundColor: c.surface, borderWidth: 1, borderColor: c.cardBorder, borderRadius: radius.md, flexDirection: 'row', alignItems: 'center', minHeight: minTarget },
-    more: { width: 44, minHeight: minTarget, alignItems: 'center', justifyContent: 'center' },
+    more: { width: rem(2.75), minHeight: minTarget, alignItems: 'center', justifyContent: 'center' },
     pressed: { opacity: 0.7 },
   }), [c]);
 
@@ -57,12 +57,12 @@ export function SwipeRow({ children, onEdit, onDelete, label }: Props) {
       <View style={styles.actions}>
         <Pressable style={[styles.action, { backgroundColor: c.accent }]} accessibilityRole="button"
           accessibilityLabel={`Edit ${label}`} onPress={() => { animateTo(0, false); onEdit(); }}>
-          <PencilSquareIcon size={20} color={c.onAccent} />
+          <PencilSquareIcon size={rem(1.25)} color={c.onAccent} />
           <Text style={styles.actionText}>Edit</Text>
         </Pressable>
         <Pressable style={[styles.action, { backgroundColor: c.danger }]} accessibilityRole="button"
           accessibilityLabel={`Delete ${label}`} onPress={() => { animateTo(0, false); onDelete(); }}>
-          <TrashIcon size={20} color={c.onAccent} />
+          <TrashIcon size={rem(1.25)} color={c.onAccent} />
           <Text style={styles.actionText}>Delete</Text>
         </Pressable>
       </View>
@@ -73,7 +73,7 @@ export function SwipeRow({ children, onEdit, onDelete, label }: Props) {
           accessibilityLabel={`More options for ${label}. Swipe left or tap to see Edit and Delete.`}
           accessibilityState={{ expanded: open }}
           onPress={() => animateTo(open ? 0 : -REVEAL, !open)}>
-          <EllipsisVerticalIcon size={22} color={c.textPrimary} />
+          <EllipsisVerticalIcon size={rem(1.375)} color={c.textPrimary} />
         </Pressable>
       </Animated.View>
     </View>

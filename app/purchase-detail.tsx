@@ -3,7 +3,7 @@ import { useFocusEffect, useLocalSearchParams, useRouter } from 'expo-router';
 import { useCallback, useMemo, useState } from 'react';
 import { Alert, Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
 import { BackLink } from '../components/settings-ui';
-import { minTarget, radius, screenInset, spacing } from '../constants/tokens';
+import { minTarget, radius, screenInset, spacing, rem, font } from '../constants/tokens';
 import { useTheme } from '../hooks/use-theme';
 import {
   CATEGORY_ICONS, CATEGORY_NAMES, Expense, categoryIcon, loadCustomCategories, formatSignedPurchase, readAllExpenses, saveExpenses, softDeleteExpense,
@@ -61,18 +61,18 @@ export default function PurchaseDetail() {
     content: { paddingHorizontal: screenInset, paddingTop: spacing[16], paddingBottom: spacing[12] },
     heading: { color: c.textPrimary, fontSize: t.h1.fontSize, fontWeight: t.h1.fontWeight, lineHeight: t.h1.lineHeight, marginTop: spacing[2] },
     amount: { color: c.textPrimary, fontSize: t.h2.fontSize, fontWeight: '700', marginTop: spacing[2], fontVariant: ['tabular-nums'] },
-    card: { backgroundColor: c.surface, borderRadius: 18, padding: spacing[4], marginTop: spacing[4], gap: spacing[2] },
+    card: { backgroundColor: c.surface, borderRadius: rem(1.125), padding: spacing[4], marginTop: spacing[4], gap: spacing[2] },
     label: { color: c.textSecondary, fontSize: t.caption.fontSize, fontWeight: '600' },
     value: { color: c.textPrimary, fontSize: t.bodyStrong.fontSize, fontWeight: '600' },
     row: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingVertical: spacing[3], gap: spacing[3] },
     rowDivider: { borderBottomWidth: 1, borderBottomColor: c.cardBorder },
     rowLabel: { color: c.textSecondary, fontSize: t.secondary.fontSize },
     rowValue: { color: c.textPrimary, fontSize: t.secondary.fontSize, fontWeight: '600', flexShrink: 1, textAlign: 'right' },
-    meaning: { backgroundColor: c.accentSoft, borderRadius: 18, padding: spacing[4], marginTop: spacing[4] },
+    meaning: { backgroundColor: c.accentSoft, borderRadius: rem(1.125), padding: spacing[4], marginTop: spacing[4] },
     meaningTitle: { color: c.textPrimary, fontSize: t.bodyStrong.fontSize, fontWeight: '600' },
     meaningBody: { color: c.textSecondary, fontSize: t.secondary.fontSize, lineHeight: t.secondary.lineHeight, marginTop: spacing[2] },
     chips: { flexDirection: 'row', flexWrap: 'wrap', gap: spacing[2], marginTop: spacing[1] },
-    chip: { minHeight: 44, borderRadius: radius.pill, borderWidth: 1, borderColor: c.cardBorder, paddingHorizontal: spacing[3], justifyContent: 'center', backgroundColor: c.surface },
+    chip: { minHeight: rem(2.75), borderRadius: radius.pill, borderWidth: 1, borderColor: c.cardBorder, paddingHorizontal: spacing[3], justifyContent: 'center', backgroundColor: c.surface },
     chipOn: { borderColor: c.accent, backgroundColor: c.accentSoft },
     chipInner: { flexDirection: 'row', alignItems: 'center', gap: spacing[2] },
     chipText: { color: c.textPrimary, fontSize: t.secondary.fontSize, fontWeight: '600' },
@@ -81,11 +81,11 @@ export default function PurchaseDetail() {
       minHeight: minTarget, borderRadius: radius.md, borderWidth: 1, borderColor: c.border, backgroundColor: c.canvas,
       paddingHorizontal: spacing[3], color: c.textPrimary, fontSize: t.body.fontSize, marginTop: spacing[1],
     },
-    button: { minHeight: 52, borderRadius: 14, borderWidth: 1, borderColor: c.cardBorder, backgroundColor: c.surface, alignItems: 'center', justifyContent: 'center', marginTop: spacing[3] },
+    button: { minHeight: rem(3.25), borderRadius: rem(0.875), borderWidth: 1, borderColor: c.cardBorder, backgroundColor: c.surface, alignItems: 'center', justifyContent: 'center', marginTop: spacing[3] },
     primary: { backgroundColor: c.accent, borderColor: c.accent },
-    buttonLabel: { color: c.textPrimary, fontSize: 17, fontWeight: '600' },
+    buttonLabel: { color: c.textPrimary, fontSize: font(1.0625), fontWeight: '600' },
     primaryLabel: { color: c.onAccent },
-    danger: { color: c.danger, fontSize: 17, fontWeight: '600' },
+    danger: { color: c.danger, fontSize: font(1.0625), fontWeight: '600' },
     saved: { color: c.success, fontSize: t.secondary.fontSize, fontWeight: '600', marginTop: spacing[2] },
     pressed: { opacity: 0.85 },
   }), [c, t]);
@@ -134,7 +134,7 @@ export default function PurchaseDetail() {
       <View style={styles.card}>
         <Text style={styles.label}>Category</Text>
         <View style={{ flexDirection: 'row', alignItems: 'center', gap: spacing[2] }}>
-          <Icon size={20} color={catColor[expense.category] ?? c.textPrimary} />
+          <Icon size={rem(1.25)} color={catColor[expense.category] ?? c.textPrimary} />
           <Text style={styles.value}>{expense.category}</Text>
         </View>
         <View style={styles.chips} accessibilityRole="radiogroup">
@@ -145,7 +145,7 @@ export default function PurchaseDetail() {
                 accessibilityRole="radio" accessibilityLabel={`Category ${cat}`} accessibilityState={{ checked: on }} aria-checked={on}
                 style={[styles.chip, on && styles.chipOn]}>
                 <View style={styles.chipInner}>
-                  {(() => { const ChipIcon = categoryIcon(cat); return <ChipIcon size={16} color={on ? c.accent : c.textSecondary} />; })()}
+                  {(() => { const ChipIcon = categoryIcon(cat); return <ChipIcon size={rem(1)} color={on ? c.accent : c.textSecondary} />; })()}
                   <Text style={[styles.chipText, on && styles.chipTextOn]}>{cat}</Text>
                 </View>
               </Pressable>

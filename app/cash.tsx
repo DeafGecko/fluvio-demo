@@ -2,7 +2,7 @@ import { useFocusEffect } from 'expo-router';
 import { useCallback, useMemo, useState } from 'react';
 import { ScrollView, StyleSheet, Text, View } from 'react-native';
 import { WithdrawForm } from '../components/withdraw-form';
-import { screenInset, spacing } from '../constants/tokens';
+import { screenInset, spacing, rem } from '../constants/tokens';
 import { useTheme } from '../hooks/use-theme';
 import { cashOnHand, loadWithdrawals, Withdrawal } from '../lib/cash';
 import { formatUSD, loadExpenses } from '../lib/expenses';
@@ -30,9 +30,9 @@ export default function Cash() {
     amount: { color: c.textPrimary, fontSize: t.h1.fontSize, fontWeight: '700', marginTop: spacing[1] },
     hint: { color: c.textSecondary, fontSize: t.caption.fontSize, marginTop: spacing[1] },
     group: { color: c.textSecondary, fontSize: t.caption.fontSize, fontWeight: '600', marginTop: spacing[6], marginBottom: spacing[2] },
-    row: { flexDirection: 'row', alignItems: 'center', backgroundColor: c.surface, borderRadius: 14, borderWidth: 1, borderColor: c.cardBorder, padding: spacing[3], marginBottom: spacing[2] },
+    row: { flexDirection: 'row', alignItems: 'center', backgroundColor: c.surface, borderRadius: rem(0.875), borderWidth: 1, borderColor: c.cardBorder, padding: spacing[3], marginBottom: spacing[2] },
     rowName: { color: c.textPrimary, fontSize: t.secondary.fontSize, fontWeight: '600' },
-    rowMeta: { color: c.textSecondary, fontSize: t.caption.fontSize, marginTop: 2 },
+    rowMeta: { color: c.textSecondary, fontSize: t.caption.fontSize, marginTop: rem(0.125) },
     rowAmount: { color: c.textPrimary, fontSize: t.secondary.fontSize, fontWeight: '700' },
     empty: { color: c.textSecondary, fontSize: t.body.fontSize, marginTop: spacing[2] },
   }), [c, t]);

@@ -2,7 +2,7 @@ import { useFocusEffect } from 'expo-router';
 import { parseAmount } from '../lib/amount';
 import { useCallback, useMemo, useState } from 'react';
 import { Alert, Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
-import { minTarget, radius, spacing } from '../constants/tokens';
+import { minTarget, radius, spacing, rem, font } from '../constants/tokens';
 import { useTheme } from '../hooks/use-theme';
 import { adjustDemoCashBalance, DemoAccount, loadDemoAccounts } from '../lib/accounts';
 import { addWithdrawal } from '../lib/cash';
@@ -53,7 +53,7 @@ export function WithdrawForm({ onSaved }: { onSaved?: () => void }) {
   const styles = useMemo(() => StyleSheet.create({
     label: { color: c.textPrimary, fontSize: t.secondary.fontSize, fontWeight: '600', marginTop: spacing[4], marginBottom: spacing[2] },
     chip: {
-      minHeight: 44, borderRadius: radius.pill, borderWidth: 1, borderColor: c.cardBorder, backgroundColor: c.surface,
+      minHeight: rem(2.75), borderRadius: radius.pill, borderWidth: 1, borderColor: c.cardBorder, backgroundColor: c.surface,
       paddingHorizontal: spacing[3], justifyContent: 'center', marginRight: spacing[2], marginBottom: spacing[2],
     },
     chipOn: { borderColor: c.accent, backgroundColor: c.accentSoft },
@@ -64,8 +64,8 @@ export function WithdrawForm({ onSaved }: { onSaved?: () => void }) {
       paddingHorizontal: spacing[4], color: c.textPrimary, fontSize: t.body.fontSize,
     },
     hint: { color: c.textSecondary, fontSize: t.caption.fontSize, marginTop: spacing[2] },
-    save: { minHeight: 52, borderRadius: 14, backgroundColor: c.accent, alignItems: 'center', justifyContent: 'center', marginTop: spacing[6] },
-    saveLabel: { color: c.onAccent, fontSize: 17, fontWeight: '600' },
+    save: { minHeight: rem(3.25), borderRadius: rem(0.875), backgroundColor: c.accent, alignItems: 'center', justifyContent: 'center', marginTop: spacing[6] },
+    saveLabel: { color: c.onAccent, fontSize: font(1.0625), fontWeight: '600' },
     disabled: { opacity: 0.5 },
   }), [c, t]);
 

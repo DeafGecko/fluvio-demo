@@ -4,7 +4,7 @@ import { useCallback, useMemo, useState } from 'react';
 import { Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
 import { BackLink } from '../components/settings-ui';
 import { TransactionRow } from '../components/transaction-row';
-import { minTarget, radius, screenInset, spacing } from '../constants/tokens';
+import { minTarget, radius, screenInset, spacing, rem } from '../constants/tokens';
 import { useTheme } from '../hooks/use-theme';
 import { CATEGORY_NAMES, Expense, categoryIcon, loadCustomCategories, loadExpenses, softDeleteExpense } from '../lib/expenses';
 
@@ -42,7 +42,7 @@ export default function Search() {
     input: { minHeight: minTarget, borderRadius: radius.md, borderWidth: 1, borderColor: c.border, backgroundColor: c.surface, paddingHorizontal: spacing[3], color: c.textPrimary, fontSize: t.body.fontSize, marginBottom: spacing[3] },
     row: { flexDirection: 'row', gap: spacing[2] },
     chips: { flexDirection: 'row', gap: spacing[2], marginBottom: spacing[4] },
-    chip: { minHeight: 44, borderRadius: radius.pill, borderWidth: 1, borderColor: c.cardBorder, backgroundColor: c.surface, paddingHorizontal: spacing[3], justifyContent: 'center' },
+    chip: { minHeight: rem(2.75), borderRadius: radius.pill, borderWidth: 1, borderColor: c.cardBorder, backgroundColor: c.surface, paddingHorizontal: spacing[3], justifyContent: 'center' },
     chipOn: { borderColor: c.accent, backgroundColor: c.accentSoft },
     chipText: { color: c.textSecondary, fontSize: t.caption.fontSize, fontWeight: '600' },
     chipTextOn: { color: c.accent },
@@ -76,7 +76,7 @@ export default function Search() {
                 accessibilityLabel={`Category ${cat}`} accessibilityState={{ checked: on }} aria-checked={on}
                 style={[styles.chip, on && styles.chipOn]}>
                 <View style={{ flexDirection: 'row', alignItems: 'center', gap: spacing[2] }}>
-                  {cat !== 'All' && (() => { const ChipIcon = categoryIcon(cat); return <ChipIcon size={16} color={on ? c.accent : c.textSecondary} />; })()}
+                  {cat !== 'All' && (() => { const ChipIcon = categoryIcon(cat); return <ChipIcon size={rem(1)} color={on ? c.accent : c.textSecondary} />; })()}
                   <Text numberOfLines={1} style={[styles.chipText, on && styles.chipTextOn]}>{cat}</Text>
                 </View>
               </Pressable>

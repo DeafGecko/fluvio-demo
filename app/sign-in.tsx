@@ -2,7 +2,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useRouter } from 'expo-router';
 import { useMemo, useState } from 'react';
 import { Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
-import { minTarget, radius, screenInset, spacing } from '../constants/tokens';
+import { minTarget, radius, screenInset, spacing, rem, font } from '../constants/tokens';
 import { useTheme } from '../hooks/use-theme';
 import { seedDemoAccounts } from '../lib/accounts';
 import { seedDemoData } from '../lib/demo-data';
@@ -32,8 +32,8 @@ export default function SignIn() {
 
   const styles = useMemo(() => StyleSheet.create({
     screen: { flex: 1, backgroundColor: c.canvas },
-    content: { paddingHorizontal: screenInset, paddingTop: 72, paddingBottom: spacing[6], flexGrow: 1 },
-    title: { color: c.textPrimary, fontSize: 30, fontWeight: '700', lineHeight: 38 },
+    content: { paddingHorizontal: screenInset, paddingTop: rem(4.5), paddingBottom: spacing[6], flexGrow: 1 },
+    title: { color: c.textPrimary, fontSize: font(1.875), fontWeight: '700', lineHeight: font(2.375) },
     body: { color: c.textSecondary, fontSize: t.body.fontSize, lineHeight: t.body.lineHeight, marginTop: spacing[3] },
     label: { color: c.textPrimary, fontSize: t.secondary.fontSize, fontWeight: '600', marginTop: spacing[6], marginBottom: spacing[2] },
     input: {
@@ -43,14 +43,14 @@ export default function SignIn() {
     note: { color: c.textSecondary, fontSize: t.caption.fontSize, lineHeight: t.caption.lineHeight, marginTop: spacing[2] },
     spacer: { flex: 1, minHeight: spacing[10] },
     primary: {
-      minHeight: 52, borderRadius: 14, backgroundColor: c.accent, alignItems: 'center', justifyContent: 'center', marginTop: spacing[3],
+      minHeight: rem(3.25), borderRadius: rem(0.875), backgroundColor: c.accent, alignItems: 'center', justifyContent: 'center', marginTop: spacing[3],
     },
-    primaryLabel: { color: c.onAccent, fontSize: 17, fontWeight: '600' },
+    primaryLabel: { color: c.onAccent, fontSize: font(1.0625), fontWeight: '600' },
     secondary: {
-      minHeight: 52, borderRadius: 14, backgroundColor: c.surface, borderWidth: 1, borderColor: c.cardBorder,
+      minHeight: rem(3.25), borderRadius: rem(0.875), backgroundColor: c.surface, borderWidth: 1, borderColor: c.cardBorder,
       alignItems: 'center', justifyContent: 'center', marginTop: spacing[3],
     },
-    secondaryLabel: { color: c.textPrimary, fontSize: 17, fontWeight: '600' },
+    secondaryLabel: { color: c.textPrimary, fontSize: font(1.0625), fontWeight: '600' },
     disabled: { opacity: 0.5 },
     pressed: { opacity: 0.85 },
   }), [c, t]);

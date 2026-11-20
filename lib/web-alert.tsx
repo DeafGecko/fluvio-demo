@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Alert, Modal, Platform, Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
 import { useTheme } from '../hooks/use-theme';
+import { rem, font } from '../constants/tokens';
 
 // On the web, Alert only shows a single message. This adds a dialog that supports
 // several buttons and text prompts, so the same Alert calls work in the browser.
@@ -35,16 +36,16 @@ export function WebAlertHost() {
   }, []);
 
   const styles = useMemo(() => StyleSheet.create({
-    scrim: { flex: 1, backgroundColor: 'rgba(0,0,0,0.5)', alignItems: 'center', justifyContent: 'center', padding: 24 },
-    card: { backgroundColor: c.surface, borderRadius: 16, borderWidth: 1, borderColor: c.border, padding: 20, width: '100%', maxWidth: 340, gap: 12 },
+    scrim: { flex: 1, backgroundColor: 'rgba(0,0,0,0.5)', alignItems: 'center', justifyContent: 'center', padding: rem(1.5) },
+    card: { backgroundColor: c.surface, borderRadius: rem(1), borderWidth: 1, borderColor: c.border, padding: rem(1.25), width: '100%', maxWidth: rem(21.25), gap: rem(0.75) },
     title: { color: c.textPrimary, fontSize: t.h3.fontSize, fontWeight: '700' },
     message: { color: c.textSecondary, fontSize: t.secondary.fontSize, lineHeight: t.secondary.lineHeight },
-    input: { minHeight: 44, borderRadius: 10, borderWidth: 1, borderColor: c.border, paddingHorizontal: 12, color: c.textPrimary, fontSize: t.body.fontSize },
-    row: { flexDirection: 'row', gap: 8, marginTop: 4 },
-    btn: { flex: 1, minHeight: 44, borderRadius: 10, borderWidth: 1, borderColor: c.border, alignItems: 'center', justifyContent: 'center' },
+    input: { minHeight: rem(2.75), borderRadius: rem(0.625), borderWidth: 1, borderColor: c.border, paddingHorizontal: rem(0.75), color: c.textPrimary, fontSize: t.body.fontSize },
+    row: { flexDirection: 'row', gap: rem(0.5), marginTop: rem(0.25) },
+    btn: { flex: 1, minHeight: rem(2.75), borderRadius: rem(0.625), borderWidth: 1, borderColor: c.border, alignItems: 'center', justifyContent: 'center' },
     primary: { backgroundColor: c.accent, borderColor: c.accent },
     danger: { backgroundColor: c.danger, borderColor: c.danger },
-    btnText: { color: c.textPrimary, fontSize: 16, fontWeight: '600' },
+    btnText: { color: c.textPrimary, fontSize: font(1), fontWeight: '600' },
     // Text on the filled buttons uses the theme's on-accent color: white in light mode, dark in dark mode.
     onColor: { color: c.onAccent },
   }), [c, t]);

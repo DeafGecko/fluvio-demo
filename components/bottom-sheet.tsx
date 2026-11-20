@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Animated, Modal, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { XMarkIcon } from 'react-native-heroicons/outline';
-import { spacing } from '../constants/tokens';
+import { spacing, rem } from '../constants/tokens';
 import { useTheme } from '../hooks/use-theme';
 
 // A panel that slides up from the bottom over the screen. It covers only part of the screen,
@@ -33,11 +33,11 @@ export function BottomSheet({ visible, onClose, title, children, height = 0.6 }:
   const styles = useMemo(() => StyleSheet.create({
     backdrop: { flex: 1, justifyContent: 'flex-end' },
     dim: { position: 'absolute', top: 0, right: 0, bottom: 0, left: 0, backgroundColor: 'rgba(0,0,0,0.35)' },
-    sheet: { backgroundColor: c.surface, borderTopLeftRadius: 24, borderTopRightRadius: 24, padding: spacing[5], paddingBottom: spacing[12] },
-    grabber: { alignSelf: 'center', width: 40, height: 5, borderRadius: 3, backgroundColor: c.cardBorder, marginBottom: spacing[3] },
+    sheet: { backgroundColor: c.surface, borderTopLeftRadius: rem(1.5), borderTopRightRadius: rem(1.5), padding: spacing[5], paddingBottom: spacing[12] },
+    grabber: { alignSelf: 'center', width: rem(2.5), height: rem(0.3125), borderRadius: rem(0.1875), backgroundColor: c.cardBorder, marginBottom: spacing[3] },
     titleRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginBottom: spacing[3] },
     title: { color: c.textPrimary, fontSize: t.h3.fontSize, fontWeight: '700', flex: 1, paddingRight: spacing[3] },
-    closeBtn: { minWidth: 44, minHeight: 44, alignItems: 'center', justifyContent: 'center' },
+    closeBtn: { minWidth: rem(2.75), minHeight: rem(2.75), alignItems: 'center', justifyContent: 'center' },
   }), [c, t]);
 
   return (
@@ -50,8 +50,8 @@ export function BottomSheet({ visible, onClose, title, children, height = 0.6 }:
           <View style={styles.grabber} />
           <View style={styles.titleRow}>
             <Text style={styles.title} accessibilityRole="header">{title}</Text>
-            <Pressable onPress={onClose} accessibilityRole="button" accessibilityLabel="Close" style={styles.closeBtn} hitSlop={8}>
-              <XMarkIcon size={22} color={c.textSecondary} />
+            <Pressable onPress={onClose} accessibilityRole="button" accessibilityLabel="Close" style={styles.closeBtn} hitSlop={rem(0.5)}>
+              <XMarkIcon size={rem(1.375)} color={c.textSecondary} />
             </Pressable>
           </View>
           <ScrollView keyboardShouldPersistTaps="handled" showsVerticalScrollIndicator={false}>

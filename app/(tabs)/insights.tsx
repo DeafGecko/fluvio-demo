@@ -5,7 +5,7 @@ import { useCallback, useMemo, useState } from 'react';
 import { ActivityIndicator, Dimensions, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { PieChart } from 'react-native-chart-kit';
 import { ArrowPathIcon, CpuChipIcon, SparklesIcon } from 'react-native-heroicons/outline';
-import { minTarget, radius, screenInset, spacing } from '../../constants/tokens';
+import { minTarget, radius, screenInset, spacing, rem } from '../../constants/tokens';
 import { useTheme } from '../../hooks/use-theme';
 import { CATEGORY_ICONS, Expense, formatUSD, loadExpenses, totalsByCategory } from '../../lib/expenses';
 import { thisMonth } from '../../lib/budget';
@@ -56,7 +56,7 @@ export default function Insights() {
     stats: { flexDirection: 'row', gap: spacing[2], marginBottom: spacing[8] },
     stat: {
       flex: 1, backgroundColor: c.surface, borderRadius: radius.md, borderWidth: 1, borderColor: c.cardBorder,
-      padding: spacing[3], minHeight: 96, justifyContent: 'space-between', alignItems: 'flex-start',
+      padding: spacing[3], minHeight: rem(6), justifyContent: 'space-between', alignItems: 'flex-start',
     },
     statLabel: { color: c.textSecondary, fontSize: t.caption.fontSize, lineHeight: t.caption.lineHeight, fontWeight: '600', textAlign: 'left' },
     statValue: { color: c.textPrimary, fontSize: t.bodyStrong.fontSize, fontWeight: '700', fontVariant: ['tabular-nums'], textAlign: 'left', alignSelf: 'stretch' },
@@ -122,7 +122,7 @@ export default function Insights() {
             const pct = total > 0 ? ((topCategory[1] / total) * 100).toFixed(0) : '0';
             return (
               <View style={styles.tip} accessible accessibilityLabel={`Top category is ${topCategory[0]}, ${formatUSD(topCategory[1])}, ${pct} percent of total logged.`}>
-                <Icon size={20} color={catColor[topCategory[0]] ?? c.textSecondary} />
+                <Icon size={rem(1.25)} color={catColor[topCategory[0]] ?? c.textSecondary} />
                 <Text style={styles.tipText}>
                   Most of your logged spending is on {topCategory[0]}: {formatUSD(topCategory[1])} ({pct}%).
                 </Text>
@@ -134,11 +134,11 @@ export default function Insights() {
             <View style={{ backgroundColor: c.surface, borderRadius: radius.lg, padding: spacing[4], marginBottom: spacing[4], borderWidth: 1, borderColor: c.warning }}>
               <Pressable onPress={() => setDupOpen(true)} accessibilityRole="button"
                 accessibilityHint="Opens the list of charges"
-                style={{ minHeight: 44, justifyContent: 'center' }}>
+                style={{ minHeight: rem(2.75), justifyContent: 'center' }}>
                 <Text style={{ color: c.warning, fontSize: t.bodyStrong.fontSize, fontWeight: '700' }}>
                   Possible double subscriptions
                 </Text>
-                <Text style={{ color: c.accent, fontSize: t.caption.fontSize, fontWeight: '600', marginTop: 2 }}>
+                <Text style={{ color: c.accent, fontSize: t.caption.fontSize, fontWeight: '600', marginTop: rem(0.125) }}>
                   Tap to see charges
                 </Text>
               </Pressable>
@@ -159,7 +159,7 @@ export default function Insights() {
             </Text>
           </BottomSheet>
 
-          <BottomSheet visible={dupOpen} onClose={() => setDupOpen(false)} title="Possible double subscriptions" height={0.6}>
+          <BottomSheet visible={dupOpen} onClose={() => setDupOpen(false)} title="Possible double subscriptions" height={rem(0.0375)}>
             {findDuplicateSubscriptions(expenses).map((d) => (
               <Text key={`${d.name}-${d.month}`} style={{ color: c.textSecondary, fontSize: t.secondary.fontSize, lineHeight: t.secondary.lineHeight, marginBottom: spacing[2] }}>
                 {d.name}: charged {d.count} times in {d.month} ({formatUSD(d.total)}). Check if you need to cancel one.
@@ -189,7 +189,7 @@ export default function Insights() {
                 legendFontSize: 12,
               }))}
               width={Dimensions.get('window').width - screenInset * 2 - spacing[6]}
-              height={170}
+              height={rem(10.625)}
               chartConfig={{ color: (o = 1) => `rgba(32,40,45,${o})` }}
               accessor="amount"
               backgroundColor="transparent"
@@ -232,7 +232,7 @@ export default function Insights() {
                 </View>
               ) : (
                 <View style={styles.row}>
-                  <CpuChipIcon size={20} color={c.onAccent} />
+                  <CpuChipIcon size={rem(1.25)} color={c.onAccent} />
                   <Text style={styles.primaryLabel}>Get AI tips</Text>
                 </View>
               )}
@@ -252,14 +252,14 @@ export default function Insights() {
             <>
               {tips.map((tip, i) => (
                 <View key={i} style={styles.tip}>
-                  <SparklesIcon size={20} color={c.accent} />
+                  <SparklesIcon size={rem(1.25)} color={c.accent} />
                   <Text style={styles.tipText}>{tip}</Text>
                 </View>
               ))}
               <Pressable style={({ pressed }) => [styles.secondaryRow, pressed && styles.pressed]}
                 onPress={handleGetInsights} accessibilityRole="button" accessibilityLabel="Refresh AI tips">
                 <View style={styles.row}>
-                  <ArrowPathIcon size={20} color={c.textPrimary} />
+                  <ArrowPathIcon size={rem(1.25)} color={c.textPrimary} />
                   <Text style={styles.secondaryLabel}>Refresh tips</Text>
                 </View>
               </Pressable>

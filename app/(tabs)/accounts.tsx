@@ -4,7 +4,7 @@ import { useCallback, useMemo, useState } from 'react';
 import { Alert, Platform, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { ChevronRightIcon } from 'react-native-heroicons/outline';
 import { SwipeRow } from '../../components/swipe-row';
-import { radius, screenInset, spacing } from '../../constants/tokens';
+import { radius, screenInset, spacing, rem, font } from '../../constants/tokens';
 import { useTheme } from '../../hooks/use-theme';
 import { DemoAccount, loadDemoAccounts, loadSyncedIds } from '../../lib/accounts';
 import { cashOnHand, deleteWithdrawal, loadWithdrawals, updateWithdrawal, Withdrawal } from '../../lib/cash';
@@ -75,19 +75,19 @@ export default function Accounts() {
     screen: { flex: 1, backgroundColor: c.canvas },
     content: { paddingHorizontal: screenInset, paddingTop: spacing[16], paddingBottom: spacing[12] },
     heading: { color: c.textPrimary, fontSize: t.h1.fontSize, fontWeight: t.h1.fontWeight, lineHeight: t.h1.lineHeight },
-    groupLabel: { color: c.textSecondary, fontSize: t.caption.fontSize, fontWeight: '600', letterSpacing: 0.6, marginTop: spacing[6], marginBottom: spacing[2], textTransform: 'uppercase' },
-    card: { backgroundColor: c.surface, borderWidth: 1, borderColor: c.cardBorder, borderRadius: 18, paddingHorizontal: 18, paddingVertical: 16, marginBottom: spacing[2], gap: spacing[1] },
+    groupLabel: { color: c.textSecondary, fontSize: t.caption.fontSize, fontWeight: '600', letterSpacing: font(0.0375), marginTop: spacing[6], marginBottom: spacing[2], textTransform: 'uppercase' },
+    card: { backgroundColor: c.surface, borderWidth: 1, borderColor: c.cardBorder, borderRadius: rem(1.125), paddingHorizontal: rem(1.125), paddingVertical: rem(1), marginBottom: spacing[2], gap: spacing[1] },
     cardTop: { flexDirection: 'row', alignItems: 'center', gap: spacing[3] },
     cardName: { flex: 1, color: c.textPrimary, fontSize: t.bodyStrong.fontSize, fontWeight: '600' },
     synced: { color: c.success, fontSize: t.caption.fontSize, fontWeight: '600' },
     warn: { color: c.warning, fontSize: t.caption.fontSize, fontWeight: '600' },
-    line: { color: c.textPrimary, fontSize: 15, fontVariant: ['tabular-nums'] },
+    line: { color: c.textPrimary, fontSize: font(0.9375), fontVariant: ['tabular-nums'] },
     sub: { color: c.textSecondary, fontSize: t.caption.fontSize, lineHeight: t.caption.lineHeight },
     addBtn: {
-      minHeight: 52, borderRadius: 14, borderWidth: 1, borderColor: c.cardBorder, backgroundColor: c.surface,
+      minHeight: rem(3.25), borderRadius: rem(0.875), borderWidth: 1, borderColor: c.cardBorder, backgroundColor: c.surface,
       alignItems: 'center', justifyContent: 'center', marginTop: spacing[4],
     },
-    addLabel: { color: c.textPrimary, fontSize: 17, fontWeight: '600' },
+    addLabel: { color: c.textPrimary, fontSize: font(1.0625), fontWeight: '600' },
     footnote: { color: c.textSecondary, fontSize: t.caption.fontSize, lineHeight: t.caption.lineHeight, marginTop: spacing[3] },
     pressed: { opacity: 0.8 },
   }), [c, t]);
@@ -95,9 +95,9 @@ export default function Accounts() {
   return (
     <ScrollView style={styles.screen} contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
       <Text style={styles.heading} accessibilityRole="header">Accounts</Text>
-      <View style={{ alignSelf: 'flex-start', backgroundColor: c.accentSoft, borderRadius: radius.pill, paddingHorizontal: spacing[2], paddingVertical: 4, marginTop: spacing[2] }}
+      <View style={{ alignSelf: 'flex-start', backgroundColor: c.accentSoft, borderRadius: radius.pill, paddingHorizontal: spacing[2], paddingVertical: rem(0.25), marginTop: spacing[2] }}
         accessibilityLabel="Demo data, fictional accounts">
-        <Text style={{ color: c.accent, fontSize: 11, fontWeight: '600', letterSpacing: 0.6 }}>DEMO · FICTIONAL ACCOUNTS</Text>
+        <Text style={{ color: c.accent, fontSize: font(0.6875), fontWeight: '600', letterSpacing: font(0.0375) }}>DEMO · FICTIONAL ACCOUNTS</Text>
       </View>
 
       {accounts.length === 0 ? (
@@ -143,13 +143,13 @@ export default function Accounts() {
 
       <Pressable onPress={() => router.push('/cash')} accessibilityRole="button"
         accessibilityHint="Tap to see and change cash taken out"
-        style={({ pressed }) => ({ backgroundColor: c.surface, borderWidth: 1, borderColor: c.cardBorder, borderRadius: 18, paddingHorizontal: 18, paddingVertical: 16, marginTop: spacing[4], opacity: pressed ? 0.85 : 1 })}>
+        style={({ pressed }) => ({ backgroundColor: c.surface, borderWidth: 1, borderColor: c.cardBorder, borderRadius: rem(1.125), paddingHorizontal: rem(1.125), paddingVertical: rem(1), marginTop: spacing[4], opacity: pressed ? 0.85 : 1 })}>
         <Text style={{ color: c.textSecondary, fontSize: t.caption.fontSize, fontWeight: '600' }}>Cash on hand</Text>
-        <Text style={{ color: c.textPrimary, fontSize: t.h2.fontSize, fontWeight: '700', marginTop: 2 }}>{money(cashHand)}</Text>
-        <Text style={{ color: c.textSecondary, fontSize: t.caption.fontSize, marginTop: 2 }}>Taken out of the bank, minus cash you spent</Text>
+        <Text style={{ color: c.textPrimary, fontSize: t.h2.fontSize, fontWeight: '700', marginTop: rem(0.125) }}>{money(cashHand)}</Text>
+        <Text style={{ color: c.textSecondary, fontSize: t.caption.fontSize, marginTop: rem(0.125) }}>Taken out of the bank, minus cash you spent</Text>
         <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginTop: spacing[3] }}>
           <Text style={{ color: c.accent, fontSize: t.secondary.fontSize, fontWeight: '600' }}>Tap to open cash notes</Text>
-          <ChevronRightIcon size={22} color={c.accent} />
+          <ChevronRightIcon size={rem(1.375)} color={c.accent} />
         </View>
       </Pressable>
 
@@ -160,13 +160,13 @@ export default function Accounts() {
 
       {withdrawals.length > 0 && (
         <View style={{ marginTop: spacing[4] }}>
-          <Text style={{ color: c.textSecondary, fontSize: t.caption.fontSize, fontWeight: '600', letterSpacing: 0.6, marginBottom: spacing[2], textTransform: 'uppercase' }}>
+          <Text style={{ color: c.textSecondary, fontSize: t.caption.fontSize, fontWeight: '600', letterSpacing: font(0.0375), marginBottom: spacing[2], textTransform: 'uppercase' }}>
             Cash taken out · tap ⋯ or swipe
           </Text>
           {[...withdrawals].reverse().map((w) => (
             <SwipeRow key={w.id} label={`Cash ${money(w.amount)} from ${w.fromName}`}
               onEdit={() => editWithdrawal(w)} onDelete={() => removeWithdrawal(w)}>
-              <View style={{ flexDirection: 'row', alignItems: 'center', padding: spacing[4], minHeight: 56 }}>
+              <View style={{ flexDirection: 'row', alignItems: 'center', padding: spacing[4], minHeight: rem(3.5) }}>
                 <View style={{ flex: 1 }}>
                   <Text style={{ color: c.textPrimary, fontSize: t.bodyStrong.fontSize, fontWeight: '600' }}>{w.fromName}</Text>
                   <Text style={{ color: c.textSecondary, fontSize: t.caption.fontSize }}>{w.date}</Text>

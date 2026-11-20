@@ -2,7 +2,7 @@ import { useFocusEffect, useRouter } from 'expo-router';
 import { useCallback, useMemo, useState } from 'react';
 import { ScrollView, StyleSheet, Text, View } from 'react-native';
 import { BackLink } from '../components/settings-ui';
-import { radius, screenInset, spacing } from '../constants/tokens';
+import { radius, screenInset, spacing, rem, font } from '../constants/tokens';
 import { useTheme } from '../hooks/use-theme';
 import { loadDemoStatement, StatementLine } from '../lib/demo-data';
 import { formatUSD } from '../lib/expenses';
@@ -54,13 +54,13 @@ export default function Statement() {
     screen: { flex: 1, backgroundColor: c.canvas },
     content: { paddingHorizontal: screenInset, paddingTop: spacing[16], paddingBottom: spacing[12] },
     heading: { color: c.textPrimary, fontSize: t.h1.fontSize, fontWeight: t.h1.fontWeight, lineHeight: t.h1.lineHeight, marginTop: spacing[2] },
-    demo: { alignSelf: 'flex-start', backgroundColor: c.accentSoft, borderRadius: radius.pill, paddingHorizontal: spacing[2], paddingVertical: 4, marginTop: spacing[2], marginBottom: spacing[4] },
-    demoText: { color: c.accent, fontSize: 11, fontWeight: '600', letterSpacing: 0.6 },
+    demo: { alignSelf: 'flex-start', backgroundColor: c.accentSoft, borderRadius: radius.pill, paddingHorizontal: spacing[2], paddingVertical: rem(0.25), marginTop: spacing[2], marginBottom: spacing[4] },
+    demoText: { color: c.accent, fontSize: font(0.6875), fontWeight: '600', letterSpacing: font(0.0375) },
     month: { color: c.textSecondary, fontSize: t.caption.fontSize, fontWeight: '600', marginTop: spacing[5], marginBottom: spacing[2], textTransform: 'uppercase' },
     row: { backgroundColor: c.surface, borderWidth: 1, borderColor: c.cardBorder, borderRadius: radius.md, padding: spacing[3], marginBottom: spacing[2], flexDirection: 'row', alignItems: 'center', gap: spacing[3] },
     info: { flex: 1 },
     name: { color: c.textPrimary, fontSize: t.bodyStrong.fontSize, fontWeight: t.bodyStrong.fontWeight },
-    meta: { color: c.textSecondary, fontSize: t.caption.fontSize, marginTop: 2 },
+    meta: { color: c.textSecondary, fontSize: t.caption.fontSize, marginTop: rem(0.125) },
     amount: { fontSize: t.bodyStrong.fontSize, fontWeight: t.bodyStrong.fontWeight, fontVariant: ['tabular-nums'] },
   }), [c, t]);
 

@@ -7,7 +7,7 @@ import { DEMO_STATEMENT_KEY, loadDemoStatement, seedDemoData } from '../lib/demo
 import { loadExpenses } from '../lib/expenses';
 import { loadDemoAccounts } from '../lib/accounts';
 import { loadWithdrawals } from '../lib/cash';
-import { radius, spacing } from '../constants/tokens';
+import { compactTextScale, radius, spacing, rem, font } from '../constants/tokens';
 import { useTheme } from '../hooks/use-theme';
 
 // Stay on the splash for 3 seconds, then go to Home or Welcome.
@@ -69,7 +69,7 @@ export default function Splash() {
 
   const styles = useMemo(() => StyleSheet.create({
     screen: { flex: 1, backgroundColor: c.canvas, alignItems: 'center', justifyContent: 'center', padding: spacing[6] },
-    title: { color: c.textPrimary, fontSize: 40, fontWeight: '700', letterSpacing: -1, marginTop: spacing[3] },
+    title: { color: c.textPrimary, fontSize: font(2.5), fontWeight: '700', letterSpacing: -1, marginTop: spacing[3] },
     tagline: { color: c.textSecondary, fontSize: t.body.fontSize, lineHeight: t.body.lineHeight, marginTop: spacing[2], textAlign: 'center' },
     spinner: { marginTop: spacing[8] },
   }), [c, t]);
@@ -80,10 +80,11 @@ export default function Splash() {
         opacity: logo,
         transform: [{ scale: logo.interpolate({ inputRange: [0, 1], outputRange: [0.85, 1] }) }],
       }}>
-        <FluvioLogo size={72} />
+        <FluvioLogo size={rem(4.5)} />
       </Animated.View>
       <Animated.View style={{ alignItems: 'center', opacity: words, transform: [{ translateY: words.interpolate({ inputRange: [0, 1], outputRange: [8, 0] }) }] }}>
-        <Text style={styles.title} accessibilityRole="header">Fluvio</Text>
+        {/* The wordmark is part of the brand lockup, so it grows only a little with the text size. */}
+        <Text style={styles.title} accessibilityRole="header" numberOfLines={1} maxFontSizeMultiplier={compactTextScale}>Fluvio</Text>
         <Text style={styles.tagline}>Know where your money goes.</Text>
       </Animated.View>
       <ActivityIndicator color={c.accent} style={styles.spinner} accessibilityLabel="Loading" />

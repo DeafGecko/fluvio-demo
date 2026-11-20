@@ -3,7 +3,7 @@ import { Text, View } from 'react-native';
 import { ArrowPathIcon, ChartPieIcon, WalletIcon } from 'react-native-heroicons/outline';
 import { FirstRunScreen, PrimaryButton, TextLink } from '../components/first-run-ui';
 import { useTheme } from '../hooks/use-theme';
-import { radius, spacing } from '../constants/tokens';
+import { radius, spacing, rem } from '../constants/tokens';
 
 // The three benefits, shown together as cards with an icon each (as in the Figma frame).
 const BENEFITS = [
@@ -24,12 +24,12 @@ export default function KeyBenefits() {
         {BENEFITS.map(({ Icon, title, body }) => (
           <View key={title} accessible
             style={{ flexDirection: 'row', alignItems: 'center', gap: spacing[3], backgroundColor: c.surface, borderRadius: radius.lg, padding: spacing[4], borderWidth: 1, borderColor: c.cardBorder }}>
-            <View style={{ width: 44, height: 44, borderRadius: 22, backgroundColor: c.iconBadge, alignItems: 'center', justifyContent: 'center' }}>
-              <Icon size={22} color={c.accent} />
+            <View style={{ width: rem(2.75), height: rem(2.75), borderRadius: rem(1.375), backgroundColor: c.iconBadge, alignItems: 'center', justifyContent: 'center' }}>
+              <Icon size={rem(1.375)} color={c.accent} />
             </View>
             <View style={{ flex: 1 }}>
               <Text style={{ color: c.textPrimary, fontSize: t.bodyStrong.fontSize, fontWeight: '600' }}>{title}</Text>
-              <Text style={{ color: c.textSecondary, fontSize: t.secondary.fontSize, lineHeight: t.secondary.lineHeight, marginTop: 2 }}>{body}</Text>
+              <Text style={{ color: c.textSecondary, fontSize: t.secondary.fontSize, lineHeight: t.secondary.lineHeight, marginTop: rem(0.125) }}>{body}</Text>
             </View>
           </View>
         ))}

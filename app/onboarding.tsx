@@ -3,7 +3,7 @@ import { useRouter } from 'expo-router';
 import { useMemo, useState } from 'react';
 import { KeyboardAvoidingView, Platform, Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
 import { SparklesIcon } from 'react-native-heroicons/outline';
-import { minTarget, radius, spacing } from '../constants/tokens';
+import { minTarget, radius, spacing, rem } from '../constants/tokens';
 import { useTheme } from '../hooks/use-theme';
 
 export default function Onboarding() {
@@ -24,9 +24,9 @@ export default function Onboarding() {
 
   const styles = useMemo(() => StyleSheet.create({
     screen: { flex: 1, backgroundColor: c.canvas },
-    container: { flex: 1, paddingHorizontal: 24, justifyContent: 'center' },
+    container: { flex: 1, paddingHorizontal: rem(1.5), justifyContent: 'center' },
     iconWrap: {
-      width: 64, height: 64, borderRadius: radius.lg, backgroundColor: c.surfaceMuted,
+      width: rem(4), height: rem(4), borderRadius: radius.lg, backgroundColor: c.surfaceMuted,
       alignItems: 'center', justifyContent: 'center', marginBottom: spacing[6],
     },
     title: { color: c.textPrimary, fontSize: t.h1.fontSize, fontWeight: t.h1.fontWeight, lineHeight: t.h1.lineHeight, marginBottom: spacing[3] },
@@ -51,7 +51,7 @@ export default function Onboarding() {
     <KeyboardAvoidingView style={styles.screen} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
       <View style={styles.container}>
         <View style={styles.iconWrap} importantForAccessibility="no" accessibilityElementsHidden>
-          <SparklesIcon size={32} color={c.accent} />
+          <SparklesIcon size={rem(2)} color={c.accent} />
         </View>
 
         <Text style={styles.title} accessibilityRole="header">Welcome to Fluvio</Text>

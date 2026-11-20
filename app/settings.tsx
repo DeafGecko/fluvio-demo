@@ -2,7 +2,7 @@ import { useRouter } from 'expo-router';
 import { useMemo } from 'react';
 import { Alert, ScrollView, StyleSheet, Text } from 'react-native';
 import {
-  ArrowPathIcon, BellIcon, EyeIcon, InformationCircleIcon, MoonIcon, ShieldCheckIcon, UserIcon,
+  ArrowPathIcon, BellIcon, InformationCircleIcon, MoonIcon, ShieldCheckIcon, UserIcon,
 } from 'react-native-heroicons/outline';
 import { BackLink, SettingsGroup, SettingsRow } from '../components/settings-ui';
 import { pickAvatar, removeAvatar } from '../lib/avatar';
@@ -33,10 +33,10 @@ export default function Settings() {
 
   const prefs = usePrefs();
 
+  // Follows the phone unless the user picks Light or Dark for this app only.
   const APPEARANCE_LABEL = { system: 'System', light: 'Light', dark: 'Dark' } as const;
-
   const chooseAppearance = () => {
-    Alert.alert('Appearance', 'Choose how Fluvio looks.', [
+    Alert.alert('Appearance', 'Choose how Fluvio looks. System follows your phone.', [
       { text: 'System', onPress: () => setPref('appearance', 'system') },
       { text: 'Light', onPress: () => setPref('appearance', 'light') },
       { text: 'Dark', onPress: () => setPref('appearance', 'dark') },
@@ -80,14 +80,12 @@ export default function Settings() {
             { text: 'Remove photo', style: 'destructive', onPress: () => { removeAvatar(); } },
             { text: 'Cancel', style: 'cancel' },
           ])} />
-        <SettingsRow Icon={MoonIcon} title="Appearance" subtitle="Light, dark, or match the system"
-          value={APPEARANCE_LABEL[prefs.appearance]} onPress={chooseAppearance} />
-        <SettingsRow Icon={EyeIcon} title="Larger text" subtitle="Bigger words and more space"
-          value={prefs.largerText ? 'On' : 'Off'} onPress={() => setPref('largerText', !prefs.largerText)} />
         <SettingsRow Icon={BellIcon} title="Notifications" subtitle="Demo alerts on this device"
           value={prefs.notifications ? 'On' : 'Off'} onPress={toggleNotifications} />
         <SettingsRow Icon={ShieldCheckIcon} title="Privacy & data" subtitle="Everything is fictional and stays on this device"
           onPress={privacyInfo} />
+        <SettingsRow Icon={MoonIcon} title="Appearance" subtitle="Light, dark, or match the phone"
+          value={APPEARANCE_LABEL[prefs.appearance]} onPress={chooseAppearance} />
         <SettingsRow Icon={MoonIcon} title="Screen layout" subtitle="Mobile or tablet width"
           value={LAYOUT_LABEL[prefs.layout]} onPress={chooseLayout} />
         <SettingsRow Icon={ArrowPathIcon} title="Show offline message" subtitle="Shows the offline message on Home"

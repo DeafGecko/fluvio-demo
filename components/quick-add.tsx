@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react';
-import { Modal, Pressable, StyleSheet, Text, View } from 'react-native';
-import { radius, spacing } from '../constants/tokens';
+import { Modal, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { compactTextScale, radius, spacing, rem } from '../constants/tokens';
 import { useTheme } from '../hooks/use-theme';
 import { parseAmount } from '../lib/amount';
 import { categoryIcon, Expense, formatUSD, readAllExpenses, saveExpenses } from '../lib/expenses';
@@ -53,17 +53,20 @@ export function QuickAdd({ visible, onClose, onSaved, onMoreDetails }: {
   };
 
   const styles = useMemo(() => StyleSheet.create({
-    backdrop: { flex: 1, backgroundColor: 'rgba(0,0,0,0.35)', justifyContent: 'flex-end' },
-    sheet: { backgroundColor: c.surface, borderTopLeftRadius: 24, borderTopRightRadius: 24, padding: spacing[5], paddingBottom: spacing[8] },
-    grabber: { alignSelf: 'center', width: 40, height: 5, borderRadius: 3, backgroundColor: c.cardBorder, marginBottom: spacing[3] },
+    root: { flex: 1, justifyContent: 'flex-end' },
+    backdrop: { position: 'absolute', top: 0, right: 0, bottom: 0, left: 0, backgroundColor: 'rgba(0,0,0,0.35)' },
+    // At large text sizes the sheet is taller than the screen: cap it below the status bar and scroll inside.
+    sheet: { backgroundColor: c.surface, borderTopLeftRadius: rem(1.5), borderTopRightRadius: rem(1.5), maxHeight: '90%' },
+    sheetContent: { padding: spacing[5], paddingBottom: spacing[8] },
+    grabber: { alignSelf: 'center', width: rem(2.5), height: rem(0.3125), borderRadius: rem(0.1875), backgroundColor: c.cardBorder, marginBottom: spacing[3] },
     title: { color: c.textPrimary, fontSize: t.bodyStrong.fontSize, fontWeight: '700' },
     amount: { color: c.textPrimary, fontSize: t.h1.fontSize, fontWeight: '700', textAlign: 'center', marginVertical: spacing[3] },
-    hint: { color: c.textSecondary, fontSize: t.caption.fontSize, textAlign: 'center', minHeight: 18 },
+    hint: { color: c.textSecondary, fontSize: t.caption.fontSize, textAlign: 'center', minHeight: rem(1.125) },
     keys: { flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'space-between', marginTop: spacing[2] },
-    key: { width: '31%', height: 52, borderRadius: radius.md, backgroundColor: c.surfaceMuted, alignItems: 'center', justifyContent: 'center', marginBottom: spacing[2] },
+    key: { width: '31%', height: rem(3.25), borderRadius: radius.md, backgroundColor: c.surfaceMuted, alignItems: 'center', justifyContent: 'center', marginBottom: spacing[2] },
     keyText: { color: c.textPrimary, fontSize: t.h3.fontSize, fontWeight: '600' },
     tiles: { flexDirection: 'row', justifyContent: 'space-between', marginTop: spacing[3] },
-    tile: { width: '23.5%', minHeight: 76, borderRadius: radius.md, borderWidth: 1, borderColor: c.cardBorder, alignItems: 'center', justifyContent: 'center', gap: 6 },
+    tile: { width: '23.5%', minHeight: rem(4.75), borderRadius: radius.md, borderWidth: 1, borderColor: c.cardBorder, alignItems: 'center', justifyContent: 'center', gap: rem(0.375) },
     tileText: { color: c.textPrimary, fontSize: t.caption.fontSize, fontWeight: '700' },
     more: { color: c.accent, fontSize: t.secondary.fontSize, fontWeight: '600', textAlign: 'center', marginTop: spacing[4] },
     pressed: { opacity: 0.8 },
@@ -71,8 +74,11 @@ export function QuickAdd({ visible, onClose, onSaved, onMoreDetails }: {
 
   return (
     <Modal visible={visible} transparent animationType="slide" onRequestClose={close}>
-      <Pressable style={styles.backdrop} onPress={close} accessibilityLabel="Close quick add">
-        <Pressable style={styles.sheet} onPress={() => {}}>
+      {/* The backdrop is a sibling layer, not a parent, so it can't take drags meant for the sheet's scroll view. */}
+      <View style={styles.root}>
+        <Pressable style={styles.backdrop} onPress={close} accessibilityLabel="Close quick add" />
+        <View style={styles.sheet}>
+          <ScrollView contentContainerStyle={styles.sheetContent} bounces={false}>
           <View style={styles.grabber} />
           <Text style={styles.title} accessibilityRole="header">Quick add</Text>
           <Text style={styles.amount} accessibilityLabel={`Amount ${amount === null ? 'not entered' : formatUSD(amount)}`}>
@@ -85,7 +91,7 @@ export function QuickAdd({ visible, onClose, onSaved, onMoreDetails }: {
               <Pressable key={k} onPress={() => press(k)} accessibilityRole="button"
                 accessibilityLabel={k === 'DEL' ? 'Delete digit' : k}
                 style={({ pressed }) => [styles.key, pressed && styles.pressed]}>
-                <Text style={styles.keyText}>{k === 'DEL' ? '⌫' : k}</Text>
+                <Text style={styles.keyText} maxFontSizeMultiplier={compactTextScale}>{k === 'DEL' ? '⌫' : k}</Text>
               </Pressable>
             ))}
           </View>
@@ -97,8 +103,8 @@ export function QuickAdd({ visible, onClose, onSaved, onMoreDetails }: {
                 <Pressable key={cat} onPress={() => logAs(cat)} accessibilityRole="button"
                   accessibilityLabel={`Save as ${cat}`}
                   style={({ pressed }) => [styles.tile, pressed && styles.pressed]}>
-                  <Icon size={22} color={catColor[cat] ?? c.textPrimary} strokeWidth={2.25} />
-                  <Text style={styles.tileText}>{cat}</Text>
+                  <Icon size={rem(1.375)} color={catColor[cat] ?? c.textPrimary} strokeWidth={2.25} />
+                  <Text style={styles.tileText} numberOfLines={1} adjustsFontSizeToFit maxFontSizeMultiplier={compactTextScale}>{cat}</Text>
                 </Pressable>
               );
             })}
@@ -107,8 +113,9 @@ export function QuickAdd({ visible, onClose, onSaved, onMoreDetails }: {
           <Pressable onPress={() => { close(); onMoreDetails(); }} accessibilityRole="link">
             <Text style={styles.more}>More details</Text>
           </Pressable>
-        </Pressable>
-      </Pressable>
+          </ScrollView>
+        </View>
+      </View>
     </Modal>
   );
 }

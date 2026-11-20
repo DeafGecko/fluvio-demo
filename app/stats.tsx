@@ -3,7 +3,7 @@ import { useFocusEffect, useRouter } from 'expo-router';
 import { useCallback, useMemo, useState } from 'react';
 import { Dimensions, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { PieChart } from 'react-native-chart-kit';
-import { minTarget, radius, screenInset, spacing } from '../constants/tokens';
+import { minTarget, radius, screenInset, spacing, rem } from '../constants/tokens';
 import { useTheme } from '../hooks/use-theme';
 import { Expense, formatUSD, loadExpenses, sumExpenses, totalsByCategory } from '../lib/expenses';
 import { currentMonthShort } from '../lib/subscriptions';
@@ -46,9 +46,9 @@ export default function Stats() {
     rowHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: spacing[2] },
     rowName: { color: c.textPrimary, fontSize: t.bodyStrong.fontSize, fontWeight: t.bodyStrong.fontWeight },
     rowValue: { color: c.textPrimary, fontSize: t.bodyStrong.fontSize, fontWeight: t.bodyStrong.fontWeight, fontVariant: ['tabular-nums'] },
-    rowMeta: { color: c.textSecondary, fontSize: t.caption.fontSize, marginTop: 2 },
-    barBg: { height: 8, backgroundColor: c.surfaceMuted, borderRadius: radius.pill, overflow: 'hidden' },
-    barFill: { height: 8, borderRadius: radius.pill },
+    rowMeta: { color: c.textSecondary, fontSize: t.caption.fontSize, marginTop: rem(0.125) },
+    barBg: { height: rem(0.5), backgroundColor: c.surfaceMuted, borderRadius: radius.pill, overflow: 'hidden' },
+    barFill: { height: rem(0.5), borderRadius: radius.pill },
     empty: { alignItems: 'center', paddingVertical: spacing[10], gap: spacing[2] },
     emptyTitle: { color: c.textPrimary, fontSize: t.h3.fontSize, fontWeight: t.h3.fontWeight },
     emptyBody: { color: c.textSecondary, fontSize: t.secondary.fontSize, lineHeight: t.secondary.lineHeight, textAlign: 'center' },
@@ -69,7 +69,7 @@ export default function Stats() {
       ) : (
         <>
           <View style={styles.card} accessible={false}>
-            <PieChart data={pieData} width={W - screenInset * 2 - spacing[6]} height={160}
+            <PieChart data={pieData} width={W - screenInset * 2 - spacing[6]} height={rem(10)}
               chartConfig={{ color: (o = 1) => `rgba(23,35,30,${o})`, backgroundColor: c.surface, backgroundGradientFrom: c.surface, backgroundGradientTo: c.surface }}
               accessor="amount" backgroundColor="transparent" paddingLeft="10" absolute={false} />
           </View>

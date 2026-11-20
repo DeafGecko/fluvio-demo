@@ -2,20 +2,20 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useEffect, useState } from 'react';
 
 // Saved user preferences. Stored on this device only.
+// Text size always comes from the phone. Light or dark follows the phone unless set here.
 export type Appearance = 'system' | 'light' | 'dark';
 
 export type Prefs = {
-  appearance: Appearance;
+  appearance: Appearance; // 'system' = follow the phone
   notifications: boolean;
   hideAmounts: boolean;   // privacy: mask money amounts on Home
-  largerText: boolean;    // accessibility: bigger text and more space
   pretendOffline: boolean; // demo: show the offline banner
   layout: 'auto' | 'phone' | 'tablet'; // content width: auto, phone-width, or tablet-width
   monthlyLimit: number;   // the most you plan to spend in a month (Left to spend uses it)
 };
 
 const DEFAULTS: Prefs = {
-  appearance: 'light', notifications: false, hideAmounts: false, largerText: false, pretendOffline: false, layout: 'auto', monthlyLimit: 2500,
+  appearance: 'system', notifications: false, hideAmounts: false, pretendOffline: false, layout: 'auto', monthlyLimit: 2500,
 };
 const KEY = 'prefs_v1';
 

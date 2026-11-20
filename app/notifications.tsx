@@ -5,7 +5,7 @@ import {
   BanknotesIcon, BellAlertIcon, ChevronRightIcon, ExclamationTriangleIcon, InformationCircleIcon,
 } from 'react-native-heroicons/outline';
 import { BackLink } from '../components/settings-ui';
-import { minTarget, radius, screenInset, spacing } from '../constants/tokens';
+import { minTarget, radius, screenInset, spacing, rem, font } from '../constants/tokens';
 import { useTheme } from '../hooks/use-theme';
 import { loadReadIds, markNotificationRead } from '../lib/notifications';
 
@@ -59,12 +59,12 @@ export default function Notifications() {
     screen: { flex: 1, backgroundColor: c.canvas },
     content: { paddingHorizontal: screenInset, paddingTop: spacing[16], paddingBottom: spacing[12] },
     heading: { color: c.textPrimary, fontSize: t.h1.fontSize, fontWeight: t.h1.fontWeight, lineHeight: t.h1.lineHeight, marginTop: spacing[2], marginBottom: spacing[4] },
-    group: { color: c.textSecondary, fontSize: t.caption.fontSize, fontWeight: '600', letterSpacing: 0.6, marginTop: spacing[4], marginBottom: spacing[2], textTransform: 'uppercase' },
+    group: { color: c.textSecondary, fontSize: t.caption.fontSize, fontWeight: '600', letterSpacing: font(0.0375), marginTop: spacing[4], marginBottom: spacing[2], textTransform: 'uppercase' },
     row: { flexDirection: 'row', alignItems: 'center', gap: spacing[3], backgroundColor: c.surface, borderWidth: 1, borderColor: c.cardBorder, borderRadius: radius.md, padding: spacing[4], marginBottom: spacing[2], minHeight: minTarget },
-    badge: { width: 40, height: 40, borderRadius: 20, alignItems: 'center', justifyContent: 'center' },
+    badge: { width: rem(2.5), height: rem(2.5), borderRadius: rem(1.25), alignItems: 'center', justifyContent: 'center' },
     info: { flex: 1 },
     title: { color: c.textPrimary, fontSize: t.bodyStrong.fontSize, fontWeight: t.bodyStrong.fontWeight },
-    body: { color: c.textSecondary, fontSize: t.secondary.fontSize, lineHeight: t.secondary.lineHeight, marginTop: 2 },
+    body: { color: c.textSecondary, fontSize: t.secondary.fontSize, lineHeight: t.secondary.lineHeight, marginTop: rem(0.125) },
     action: { color: c.accent, fontSize: t.caption.fontSize, fontWeight: '600', marginTop: spacing[1] },
     help: { backgroundColor: c.accentSoft, borderRadius: radius.lg, padding: spacing[4], marginTop: spacing[6] },
     helpTitle: { color: c.textPrimary, fontSize: t.h3.fontSize, fontWeight: t.h3.fontWeight, marginBottom: spacing[2] },
@@ -94,14 +94,14 @@ export default function Notifications() {
                   onPress={() => open(item)} accessibilityRole="button"
                   accessibilityHint={`${item.body}. ${item.when}. ${item.action}.`}>
                   <View style={[styles.badge, { backgroundColor: c.accentSoft }]}>
-                    <Icon size={20} color={tint} />
+                    <Icon size={rem(1.25)} color={tint} />
                   </View>
                   <View style={styles.info}>
                     <Text style={styles.title}>{item.title}</Text>
                     <Text style={styles.body}>{item.body}</Text>
                     <Text style={styles.action}>{item.action}</Text>
                   </View>
-                  <ChevronRightIcon size={20} color={c.textTertiary} />
+                  <ChevronRightIcon size={rem(1.25)} color={c.textTertiary} />
                 </Pressable>
               );
             })}
@@ -114,7 +114,7 @@ export default function Notifications() {
         {HOW.map((h) => (
           <Pressable key={h.action} style={({ pressed }) => [styles.helpRow, pressed && styles.pressed]}
             onPress={() => router.push(h.target)} accessibilityRole="button" accessibilityHint={h.action}>
-            <InformationCircleIcon size={20} color={c.accent} />
+            <InformationCircleIcon size={rem(1.25)} color={c.accent} />
             <Text style={styles.helpText}>{h.text}</Text>
             <Text style={styles.helpAction}>{h.action}</Text>
           </Pressable>

@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { ActivityIndicator, Text, View } from 'react-native';
 import { ExclamationTriangleIcon } from 'react-native-heroicons/solid';
 import { FirstRunScreen, PrimaryButton, SecondaryButton } from '../components/first-run-ui';
-import { spacing } from '../constants/tokens';
+import { spacing, rem } from '../constants/tokens';
 import { useTheme } from '../hooks/use-theme';
 import { seedDemoAccounts } from '../lib/accounts';
 import { seedDemoData } from '../lib/demo-data';
@@ -30,8 +30,8 @@ export default function ConnectionError() {
   return (
     <FirstRunScreen back={() => router.back()} backLabel="Connect bank">
       <View style={{ alignItems: 'center', marginTop: spacing[8] }}>
-        <View style={{ width: 96, height: 96, borderRadius: 48, backgroundColor: c.surfaceMuted, alignItems: 'center', justifyContent: 'center' }}>
-          <ExclamationTriangleIcon size={56} color={c.warning} />
+        <View style={{ width: rem(6), height: rem(6), borderRadius: rem(3), backgroundColor: c.surfaceMuted, alignItems: 'center', justifyContent: 'center' }}>
+          <ExclamationTriangleIcon size={rem(3.5)} color={c.warning} />
         </View>
       </View>
       <Text style={{ color: c.textPrimary, fontSize: t.h1.fontSize, fontWeight: '700', textAlign: 'center', marginTop: spacing[4] }}
