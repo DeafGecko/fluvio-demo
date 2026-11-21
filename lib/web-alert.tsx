@@ -1,10 +1,10 @@
 import { useEffect, useMemo, useState } from 'react';
-import { Alert, Modal, Platform, Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
+import { Alert, Modal, Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
 import { useTheme } from '../hooks/use-theme';
 import { rem, font } from '../constants/tokens';
 
-// On the web, Alert only shows a single message. This adds a dialog that supports
-// several buttons and text prompts, so the same Alert calls work in the browser.
+// Our own dialog, used on every platform instead of the system alert. The system alert
+// cannot be tinted; this one follows the app's colors. It supports several buttons and text prompts.
 type Btn = { text: string; style?: 'default' | 'cancel' | 'destructive'; onPress?: (value?: string) => void };
 type Req = { title: string; message?: string; buttons: Btn[]; prompt: boolean; defaultValue?: string; id: number };
 
@@ -14,7 +14,6 @@ const show = (r: Omit<Req, 'id'>) => listener?.({ ...r, id: ++seq });
 
 // Replace Alert.alert and Alert.prompt on the web. Runs once when the app loads.
 export function installWebAlerts() {
-  if (Platform.OS !== 'web') return;
   const A = Alert as any;
   A.alert = (title: string, message?: string, buttons?: Btn[]) =>
     show({ title, message, buttons: buttons && buttons.length ? buttons : [{ text: 'OK' }], prompt: false });

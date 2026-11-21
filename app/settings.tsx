@@ -2,7 +2,7 @@ import { useRouter } from 'expo-router';
 import { useMemo } from 'react';
 import { Alert, ScrollView, StyleSheet, Text } from 'react-native';
 import {
-  ArrowPathIcon, BellIcon, InformationCircleIcon, MoonIcon, ShieldCheckIcon, UserIcon,
+  ArrowPathIcon, BellIcon, ChartBarIcon, DevicePhoneMobileIcon, InformationCircleIcon, MoonIcon, ShieldCheckIcon, UserIcon,
 } from 'react-native-heroicons/outline';
 import { BackLink, SettingsGroup, SettingsRow } from '../components/settings-ui';
 import { pickAvatar, removeAvatar } from '../lib/avatar';
@@ -66,6 +66,7 @@ export default function Settings() {
     screen: { flex: 1, backgroundColor: c.canvas },
     content: { paddingHorizontal: screenInset, paddingTop: spacing[16], paddingBottom: spacing[12] },
     heading: { color: c.textPrimary, fontSize: t.h1.fontSize, fontWeight: t.h1.fontWeight, lineHeight: t.h1.lineHeight, marginTop: spacing[2], marginBottom: spacing[4] },
+    sectionLabel: { color: c.textSecondary, fontSize: t.caption.fontSize, lineHeight: t.caption.lineHeight, fontWeight: '600', marginBottom: spacing[2], marginLeft: spacing[1] },
   }), [c, t]);
 
   return (
@@ -73,23 +74,38 @@ export default function Settings() {
       <BackLink label="Profile" onPress={() => router.back()} />
       <Text style={styles.heading} accessibilityRole="header">Settings</Text>
 
+      <Text style={styles.sectionLabel} accessibilityRole="header">Profile</Text>
       <SettingsGroup>
-        <SettingsRow Icon={UserIcon} title="Profile photo" subtitle="Upload a photo or remove it"
+        <SettingsRow Icon={UserIcon} title="Profile photo" subtitle="Upload a photo or remove it" last
           onPress={() => Alert.alert('Profile photo', 'Choose what to do with your photo.', [
             { text: 'Upload photo', onPress: () => { pickAvatar().catch(() => Alert.alert('Could not open photos', 'Allow photo access in Settings and try again.')); } },
             { text: 'Remove photo', style: 'destructive', onPress: () => { removeAvatar(); } },
             { text: 'Cancel', style: 'cancel' },
           ])} />
+      </SettingsGroup>
+
+      <Text style={styles.sectionLabel} accessibilityRole="header">Preferences</Text>
+      <SettingsGroup>
         <SettingsRow Icon={BellIcon} title="Notifications" subtitle="Demo alerts on this device"
           value={prefs.notifications ? 'On' : 'Off'} onPress={toggleNotifications} />
-        <SettingsRow Icon={ShieldCheckIcon} title="Privacy & data" subtitle="Everything is fictional and stays on this device"
-          onPress={privacyInfo} />
         <SettingsRow Icon={MoonIcon} title="Appearance" subtitle="Light, dark, or match the phone"
           value={APPEARANCE_LABEL[prefs.appearance]} onPress={chooseAppearance} />
-        <SettingsRow Icon={MoonIcon} title="Screen layout" subtitle="Mobile or tablet width"
-          value={LAYOUT_LABEL[prefs.layout]} onPress={chooseLayout} />
+        <SettingsRow Icon={DevicePhoneMobileIcon} title="Screen layout" subtitle="Mobile or tablet width"
+          value={LAYOUT_LABEL[prefs.layout]} onPress={chooseLayout} last />
+      </SettingsGroup>
+
+      <Text style={styles.sectionLabel} accessibilityRole="header">Privacy</Text>
+      <SettingsGroup>
+        <SettingsRow Icon={ShieldCheckIcon} title="Privacy & data" subtitle="Everything is fictional and stays on this device"
+          onPress={privacyInfo} last />
+      </SettingsGroup>
+
+      <Text style={styles.sectionLabel} accessibilityRole="header">Demo</Text>
+      <SettingsGroup>
         <SettingsRow Icon={ArrowPathIcon} title="Show offline message" subtitle="Shows the offline message on Home"
           value={prefs.pretendOffline ? 'On' : 'Off'} onPress={() => setPref('pretendOffline', !prefs.pretendOffline)} />
+        <SettingsRow Icon={ChartBarIcon} title="Usage on this device" subtitle="Which screens and buttons are used"
+          onPress={() => router.push('/usage')} />
         <SettingsRow Icon={ArrowPathIcon} title="Reset demo" subtitle="Restore fictional data" onPress={demoReset} />
         <SettingsRow Icon={InformationCircleIcon} title="About Fluvio" subtitle="Demo app, not a bank" onPress={aboutInfo} last />
       </SettingsGroup>

@@ -4,6 +4,7 @@ import { compactTextScale, radius, spacing, rem } from '../constants/tokens';
 import { useTheme } from '../hooks/use-theme';
 import { parseAmount } from '../lib/amount';
 import { categoryIcon, Expense, formatUSD, readAllExpenses, saveExpenses } from '../lib/expenses';
+import { recordSave, trackUse } from '../lib/usage';
 
 // Two-tap logging: type the amount on the keypad, then tap one of four category tiles.
 // Saves straight away. "More details" opens the full form for a name, note, or cash.
@@ -44,9 +45,11 @@ export function QuickAdd({ visible, onClose, onSaved, onMoreDetails }: {
 
   const logAs = async (category: string) => {
     if (amount === null || amount <= 0) { setHint('Type an amount first.'); return; }
+    trackUse(`save:quick-add:${category}`);
     const expense: Expense = { id: newId(), name: category, amount, category, note: '', date: todayLabel() };
     const all = await readAllExpenses();
     await saveExpenses([...all, expense]);
+    recordSave('Home quick add', category);
     setValue('');
     onSaved();
     onClose();

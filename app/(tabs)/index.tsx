@@ -8,6 +8,7 @@ import { useTheme } from '../../hooks/use-theme';
 import { Avatar } from '../../components/avatar';
 import { TransactionRow } from '../../components/transaction-row';
 import { seedDemoData } from '../../lib/demo-data';
+import { trackUse } from '../../lib/usage';
 import { setPref, usePrefs } from '../../lib/prefs';
 import { OfflineBanner } from '../../components/offline-banner';
 import { loadUnreadCount } from '../../lib/notifications';
@@ -91,11 +92,11 @@ export default function Home() {
     // Large text: the buttons move above the title so the title keeps the full width.
     header: isLargeText
       ? { flexDirection: 'column-reverse', gap: spacing[4], marginBottom: spacing[6] }
-      : { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: spacing[6] },
+      : { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: spacing[6] },
     greeting: { color: c.textSecondary, fontSize: font(0.875), fontWeight: '400', lineHeight: font(1.1875) },
     title: { color: c.textPrimary, fontSize: font(1.5), fontWeight: '700', lineHeight: font(2), marginTop: rem(0.125) },
     caption: { color: c.textSecondary, fontSize: t.caption.fontSize, lineHeight: t.caption.lineHeight, marginTop: rem(0.125) },
-    topRight: { flexDirection: 'row', alignItems: 'center', gap: spacing[2], alignSelf: 'flex-end' },
+    topRight: { flexDirection: 'row', alignItems: 'center', gap: spacing[2], alignSelf: 'flex-start' },
     alert: {
       flexDirection: 'row', alignItems: 'center', gap: spacing[2], backgroundColor: c.surface,
       borderRadius: radius.md, borderWidth: 1, borderColor: c.warning, padding: spacing[3], marginBottom: spacing[4],
@@ -113,7 +114,7 @@ export default function Home() {
     },
     avatarLetter: { color: c.accent, fontSize: font(1.0625), fontWeight: '700' },
     // Plain outline bell, no background or border.
-    bell: { width: rem(2.75), height: rem(2.75), alignItems: 'center', justifyContent: 'center' },
+    bell: { width: rem(2.75), height: rem(2.75), alignItems: 'center', justifyContent: 'center', marginTop: rem(0.25) },
     // Full red circle with the unread count inside.
     bellCount: {
       position: 'absolute', top: rem(0.125), right: 0, minWidth: rem(1.25), height: rem(1.25), borderRadius: rem(0.625),
@@ -134,7 +135,8 @@ export default function Home() {
     balanceLabel: { color: c.textPrimary, fontSize: t.bodyStrong.fontSize, fontWeight: '600' },
     balanceNote: { color: c.textSecondary, fontSize: t.caption.fontSize, marginTop: rem(0.125) },
     balanceAmount: { color: c.textPrimary, fontSize: t.h2.fontSize, fontWeight: '700', fontVariant: ['tabular-nums'] },
-    chip: { flexDirection: 'row', alignItems: 'center', gap: rem(0.375), minHeight: rem(2.5), paddingHorizontal: spacing[3], borderRadius: rem(62.4375), backgroundColor: c.surface, borderWidth: 1, borderColor: c.cardBorder },
+    // Same capsule as History: side padding and a short height.
+    chip: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: spacing[2], paddingVertical: rem(0.375), paddingHorizontal: spacing[4], borderRadius: radius.pill, backgroundColor: c.surface, borderWidth: 1, borderColor: c.cardBorder },
     chipOn: { backgroundColor: c.accent, borderColor: c.accent },
     chipLabel: { color: c.textPrimary, fontSize: t.secondary.fontSize, fontWeight: '600' },
     chipLabelOn: { color: c.onAccent },
@@ -144,7 +146,7 @@ export default function Home() {
     bar: { flexDirection: 'row', height: rem(0.625), borderRadius: rem(0.3125), overflow: 'hidden', marginTop: spacing[4], backgroundColor: c.surfaceMuted },
     catRow: { flexDirection: 'row', flexWrap: 'wrap', gap: spacing[2], marginTop: spacing[4] },
     // Large text: the amount wraps under the name, so the chip uses card corners instead of a pill.
-    catChip: { flexDirection: 'row', flexWrap: 'wrap', maxWidth: '100%', alignItems: 'center', gap: rem(0.375), paddingVertical: rem(0.375), paddingHorizontal: rem(0.625), borderRadius: isLargeText ? radius.md : rem(62.4375), borderWidth: 1, borderColor: c.cardBorder },
+    catChip: { flexDirection: 'row', flexShrink: 0, alignItems: 'center', gap: rem(0.375), paddingVertical: rem(0.125), paddingHorizontal: rem(0.625), borderRadius: isLargeText ? radius.md : rem(62.4375), borderWidth: 1, borderColor: c.cardBorder },
     catDot: { width: rem(0.5), height: rem(0.5), borderRadius: rem(0.25) },
     catName: { flexShrink: 1, color: c.textSecondary, fontSize: t.caption.fontSize, fontWeight: '600' },
     catAmt: { color: c.textPrimary, fontSize: t.caption.fontSize, fontWeight: '700' },
@@ -193,7 +195,7 @@ export default function Home() {
             <Pressable style={styles.bell} accessibilityRole="button"
               accessibilityLabel={unread > 0 ? `Notifications, ${unread} new` : 'Notifications'}
               onPress={() => router.push('/notifications')}>
-              <BellIcon size={rem(1.5)} color={c.textPrimary} />
+              <BellIcon size={rem(2)} color={c.textPrimary} />
               {unread > 0 && (
                 <View style={styles.bellCount}>
                   <Text style={styles.bellCountText} maxFontSizeMultiplier={compactTextScale}>{unread}</Text>
@@ -203,7 +205,7 @@ export default function Home() {
           )}
           {SHOW_HOME_ADD && (
             <Pressable style={styles.addBtn} accessibilityRole="button" accessibilityLabel="Add expense"
-              onPress={() => setQuickOpen(true)}>
+              onPress={() => { trackUse('tap:home-add'); setQuickOpen(true); }}>
               <PlusIcon size={rem(1.375)} color={c.onAccent} />
             </Pressable>
           )}
@@ -260,7 +262,7 @@ export default function Home() {
                 <View style={[styles.catDot, { backgroundColor: catColor[cat] ?? c.textTertiary }]} />
                 <Text style={styles.catName} numberOfLines={1}>{cat}</Text>
               </View>
-              <Text style={styles.catAmt}>{hideAmounts ? '••••' : formatUSD(amt)}</Text>
+              <Text style={styles.catAmt} numberOfLines={1}>{hideAmounts ? '••••' : formatUSD(amt)}</Text>
             </View>
           ))}
         </View>
@@ -285,7 +287,7 @@ export default function Home() {
             <Pressable key={cat} onPress={() => setChosen(cat)} accessibilityRole="tab"
               accessibilityState={{ selected: on }} aria-selected={on}
               style={[styles.chip, on && styles.chipOn]}>
-              {Icon && <Icon size={rem(1.125)} color={on ? c.onAccent : c.textPrimary} strokeWidth={2.25} />}
+              {Icon && <Icon size={rem(1.125)} color={on ? c.onAccent : (catColor[cat] ?? c.textPrimary)} strokeWidth={2.25} />}
               <Text style={[styles.chipLabel, on && styles.chipLabelOn]}>{cat}</Text>
             </Pressable>
           );

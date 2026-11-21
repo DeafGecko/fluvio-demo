@@ -47,13 +47,13 @@ export const colors = {
     // Fluvio handoff, light theme (token values from Fluvio-handoff section 2).
     canvas: '#F7F8F7', surface: '#FFFFFF', surfaceMuted: '#E8ECEE',
     textPrimary: '#20282D', textSecondary: '#56636C', textTertiary: '#56636C',
-    border: '#858F97', cardBorder: '#858F97', avatarBorder: '#356B85', iconBadge: '#E3ECF1', accent: '#356B85', accentSoft: '#E3ECF1', accentLight: '#82B5CF',
+    border: '#858F97', cardBorder: '#858F97', avatarBorder: '#356B85', iconBadge: '#E3ECF1', iconBadgeStrong: '#BFD8E5', accent: '#356B85', accentSoft: '#E3ECF1', accentLight: '#82B5CF',
     onAccent: '#FFFFFF', success: '#2E6B4F', danger: '#9E3434', warning: '#7A5200',
     info: '#356B85', focus: '#82B5CF',
   },
   dark: {
     // Fluvio handoff, dark theme.
-    canvas: '#141B1F', surface: '#20282D', surfaceMuted: '#2A353B', cardBorder: 'transparent', avatarBorder: 'transparent', iconBadge: 'transparent',
+    canvas: '#141B1F', surface: '#20282D', surfaceMuted: '#2A353B', cardBorder: 'transparent', avatarBorder: 'transparent', iconBadge: 'transparent', iconBadgeStrong: '#2A3D48',
     textPrimary: '#F5F7F8', textSecondary: '#B4C4CC', textTertiary: '#B4C4CC',
     border: '#72878F', accent: '#82B5CF', accentSoft: '#2A3D48', accentLight: '#356B85',
     onAccent: '#141B1F', success: '#8FD3B0', danger: '#FFABAB', warning: '#F4CB75',

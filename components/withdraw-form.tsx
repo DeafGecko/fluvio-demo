@@ -6,6 +6,7 @@ import { minTarget, radius, spacing, rem, font } from '../constants/tokens';
 import { useTheme } from '../hooks/use-theme';
 import { adjustDemoCashBalance, DemoAccount, loadDemoAccounts } from '../lib/accounts';
 import { addWithdrawal } from '../lib/cash';
+import { recordSave } from '../lib/usage';
 import { formatUSD } from '../lib/expenses';
 import { SavedPopout } from './saved-popout';
 
@@ -43,6 +44,7 @@ export function WithdrawForm({ onSaved }: { onSaved?: () => void }) {
     setSaving(true);
     await adjustDemoCashBalance(from.id, -value);
     await addWithdrawal({ fromAccountId: from.id, fromName: `${from.name} ····${from.mask}`, amount: value, note: note.trim() || undefined });
+    recordSave('Take out cash');
     setSaving(false);
     setSaved(true);
     setAmount('');
@@ -91,7 +93,7 @@ export function WithdrawForm({ onSaved }: { onSaved?: () => void }) {
       <TextInput style={styles.input} value={amount} onChangeText={(v) => setAmount(v.replace(/[^0-9.]/g, '').slice(0, 10))} maxLength={10} keyboardType="decimal-pad"
         placeholder="0.00" placeholderTextColor={c.textTertiary} accessibilityLabel="Amount to take out" />
 
-      <Text style={styles.label}>What is the cash for? (optional)</Text>
+      <Text style={styles.label}>Why are you taking out cash? (optional, shows in your history)</Text>
       <TextInput style={styles.input} value={note} onChangeText={(v) => setNote(v.slice(0, 280))} maxLength={280}
         placeholder="For example, groceries or parking" placeholderTextColor={c.textTertiary} accessibilityLabel="What the cash is for, optional" />
 

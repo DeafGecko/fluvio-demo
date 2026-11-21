@@ -11,7 +11,7 @@ import { CATEGORY_NAMES, Expense, categoryIcon, loadCustomCategories, loadExpens
 // Find a purchase by name or category, and narrow it by amount. Opens from Activity.
 export default function Search() {
   const router = useRouter();
-  const { c, t } = useTheme();
+  const { c, t, cat: catColor } = useTheme();
   const [expenses, setExpenses] = useState<Expense[]>([]);
   const [customCats, setCustomCats] = useState<string[]>([]);
   const [query, setQuery] = useState('');
@@ -76,7 +76,7 @@ export default function Search() {
                 accessibilityLabel={`Category ${cat}`} accessibilityState={{ checked: on }} aria-checked={on}
                 style={[styles.chip, on && styles.chipOn]}>
                 <View style={{ flexDirection: 'row', alignItems: 'center', gap: spacing[2] }}>
-                  {cat !== 'All' && (() => { const ChipIcon = categoryIcon(cat); return <ChipIcon size={rem(1)} color={on ? c.accent : c.textSecondary} />; })()}
+                  {cat !== 'All' && (() => { const ChipIcon = categoryIcon(cat); return <ChipIcon size={rem(1)} color={catColor[cat] ?? c.textSecondary} />; })()}
                   <Text numberOfLines={1} style={[styles.chipText, on && styles.chipTextOn]}>{cat}</Text>
                 </View>
               </Pressable>

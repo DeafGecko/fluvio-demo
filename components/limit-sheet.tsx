@@ -3,6 +3,7 @@ import { Alert, Pressable, Text, View } from 'react-native';
 import { radius, spacing, rem, font } from '../constants/tokens';
 import { useTheme } from '../hooks/use-theme';
 import { parseAmount } from '../lib/amount';
+import { recordSave, trackUse } from '../lib/usage';
 import { BottomSheet } from './bottom-sheet';
 
 // The monthly limit sheet. It uses an on-screen keypad, so typing works on the phone without
@@ -41,6 +42,8 @@ export function LimitSheet({ visible, onClose, current, onSave }: {
   const save = () => {
     const v = parseAmount(draft);
     if (v === null || v <= 0) { Alert.alert('Check the limit', 'Enter an amount greater than zero, up to 1,000,000.'); return; }
+    trackUse('save:monthly-limit');
+    recordSave('Monthly limit');
     onSave(v);
     onClose();
   };

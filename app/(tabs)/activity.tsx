@@ -13,7 +13,7 @@ import { useTheme } from '../../hooks/use-theme';
 const ALL = 'All';
 
 export default function Activity() {
-  const { c, t } = useTheme();
+  const { c, t, cat: catColor } = useTheme();
   const router = useRouter();
   const [expenses, setExpenses] = useState<Expense[]>([]);
   const [loading, setLoading] = useState(true);
@@ -73,7 +73,8 @@ export default function Activity() {
     clearBtn: { width: minTarget, height: minTarget, alignItems: 'center', justifyContent: 'center' },
     chips: { flexDirection: 'row', flexWrap: 'wrap', gap: spacing[2], marginBottom: spacing[6] },
     chip: {
-      minHeight: rem(2.5), paddingHorizontal: spacing[3], borderRadius: radius.pill, flexDirection: 'row', alignItems: 'center', gap: rem(0.375),
+      // Same capsule as History: side padding and a short height.
+      paddingVertical: rem(0.375), paddingHorizontal: spacing[4], borderRadius: radius.pill, flexDirection: 'row', alignItems: 'center', gap: spacing[2],
       borderWidth: 1, borderColor: c.cardBorder, backgroundColor: c.surface, justifyContent: 'center',
     },
     chipSelected: { backgroundColor: c.accent, borderColor: c.accent },
@@ -129,7 +130,7 @@ export default function Activity() {
                   accessibilityLabel={name}
                   accessibilityState={{ checked: selected }} aria-checked={selected}
                   onPress={() => setFilter(name)}>
-                  {name !== ALL && (() => { const ChipIcon = categoryIcon(name); return <ChipIcon size={rem(1.125)} color={selected ? c.onAccent : c.textPrimary} strokeWidth={2.25} />; })()}
+                  {name !== ALL && (() => { const ChipIcon = categoryIcon(name); return <ChipIcon size={rem(1.125)} color={selected ? c.onAccent : (catColor[name] ?? c.textPrimary)} strokeWidth={2.25} />; })()}
                   <Text numberOfLines={1} style={[styles.chipLabel, selected && styles.chipLabelSelected]}>{name}</Text>
                 </Pressable>
               );

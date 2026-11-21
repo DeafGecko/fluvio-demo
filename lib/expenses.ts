@@ -11,6 +11,7 @@ export type Expense = {
   id: string; name: string; amount: number;
   category: string; note: string; date: string;
   deletedAt?: string;   // set when deleted; kept in history
+  accountId?: string;   // which account it was paid from (for example chk-4821); defaults to Checking
 };
 
 export const CATEGORY_NAMES = ['Food', 'Transport', 'Entertainment', 'Health', 'Shopping', 'Bills', 'Other'] as const;

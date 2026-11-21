@@ -10,6 +10,7 @@ import { useTheme } from '../hooks/use-theme';
 import { CATEGORY_NAMES, Expense, STORAGE_KEY, addCustomCategory, categoryIcon, formatUSD, loadCustomCategories, loadExpenses, readAllExpenses } from '../lib/expenses';
 import { findPaidThisMonth } from '../lib/subscriptions';
 import { SavedPopout } from '../components/saved-popout';
+import { recordSave } from '../lib/usage';
 import { ErrorPopout } from '../components/status-popout';
 
 // Short date for a new purchase, for example "Nov 18". Called when a purchase is saved.
@@ -107,8 +108,10 @@ export default function AddExpense() {
           ? { ...e, name: newExpense.name, amount: newExpense.amount, category: newExpense.category, note: newExpense.note }
           : e));
         await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
+        recordSave('Edit purchase form', newExpense.category);
       } else {
         await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify([...existing, newExpense]));
+        recordSave('Add expense form', newExpense.category);
       }
       setSaved(true);
       setTimeout(() => router.back(), 1800);

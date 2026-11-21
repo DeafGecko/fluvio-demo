@@ -52,7 +52,7 @@ export function SettingsRow({ Icon, title, subtitle, value, destructive, onPress
   const { c, t } = useTheme();
   const styles = useMemo(() => StyleSheet.create({
     row: { flexDirection: 'row', alignItems: 'center', gap: spacing[3], minHeight: rem(3.5), paddingVertical: spacing[2] },
-    badge: { width: rem(2.25), height: rem(2.25), borderRadius: rem(1.125), backgroundColor: destructive ? c.surfaceMuted : c.iconBadge, alignItems: 'center', justifyContent: 'center' },
+    badge: { width: rem(2.25), height: rem(2.25), borderRadius: rem(1.125), backgroundColor: destructive ? c.surfaceMuted : c.iconBadgeStrong, alignItems: 'center', justifyContent: 'center' },
     info: { flex: 1 },
     title: { color: destructive ? c.danger : c.textPrimary, fontSize: t.bodyStrong.fontSize, fontWeight: t.bodyStrong.fontWeight },
     sub: { color: c.textSecondary, fontSize: t.caption.fontSize, lineHeight: t.caption.lineHeight, marginTop: rem(0.125) },

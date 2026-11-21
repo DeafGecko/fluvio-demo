@@ -3,6 +3,7 @@ import { useRouter } from 'expo-router';
 import { useEffect, useMemo, useState } from 'react';
 import { AccessibilityInfo, ActivityIndicator, Animated, StyleSheet, Text, View } from 'react-native';
 import { FluvioLogo } from '../components/fluvio-logo';
+import { SplashWaves } from '../components/splash-waves';
 import { DEMO_STATEMENT_KEY, loadDemoStatement, seedDemoData } from '../lib/demo-data';
 import { loadExpenses } from '../lib/expenses';
 import { loadDemoAccounts } from '../lib/accounts';
@@ -76,6 +77,7 @@ export default function Splash() {
 
   return (
     <View style={styles.screen} accessibilityLabel="Fluvio, loading">
+      <SplashWaves />
       <Animated.View style={{
         opacity: logo,
         transform: [{ scale: logo.interpolate({ inputRange: [0, 1], outputRange: [0.85, 1] }) }],

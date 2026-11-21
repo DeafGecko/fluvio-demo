@@ -3,6 +3,8 @@ import { useFocusEffect, useLocalSearchParams, useRouter } from 'expo-router';
 import { useCallback, useMemo, useState } from 'react';
 import { Alert, Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
 import { BackLink } from '../components/settings-ui';
+import { PencilSquareIcon } from 'react-native-heroicons/outline';
+import { recordSave } from '../lib/usage';
 import { minTarget, radius, screenInset, spacing, rem, font } from '../constants/tokens';
 import { useTheme } from '../hooks/use-theme';
 import {
@@ -35,6 +37,7 @@ export default function PurchaseDetail() {
     if (!expense) return;
     const all = await readAllExpenses();
     await saveExpenses(all.map((e) => (e.id === expense.id ? { ...e, ...changes } : e)));
+    recordSave('Purchase details', Object.keys(changes).join(', '));
     await load();
     setSaved('Saved');
     setTimeout(() => setSaved(null), 1200);
@@ -107,7 +110,15 @@ export default function PurchaseDetail() {
   return (
     <ScrollView style={styles.screen} contentContainerStyle={styles.content} keyboardShouldPersistTaps="handled" showsVerticalScrollIndicator={false}>
       <BackLink label="Activity" onPress={() => (router.canGoBack() ? router.back() : router.replace('/activity'))} />
-      <Text style={styles.heading} accessibilityRole="header">{expense.name}</Text>
+      {/* Edit sits right beside the purchase name. */}
+      <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+        <Text style={[styles.heading, { flex: 1 }]} accessibilityRole="header">{expense.name}</Text>
+        <Pressable onPress={() => router.push({ pathname: '/add', params: { id: expense.id } })} accessibilityRole="button"
+          accessibilityLabel="Edit name, amount, and details" hitSlop={8}
+          style={({ pressed }) => [{ minWidth: minTarget, minHeight: minTarget, alignItems: 'center', justifyContent: 'center' }, pressed && styles.pressed]}>
+          <PencilSquareIcon size={rem(1.375)} color={c.accent} />
+        </Pressable>
+      </View>
       <Text style={styles.amount}>{formatSignedPurchase(expense.amount)}</Text>
       <SavedPopout visible={!!saved} message={saved ?? 'Saved'} />
 
@@ -145,7 +156,7 @@ export default function PurchaseDetail() {
                 accessibilityRole="radio" accessibilityLabel={`Category ${cat}`} accessibilityState={{ checked: on }} aria-checked={on}
                 style={[styles.chip, on && styles.chipOn]}>
                 <View style={styles.chipInner}>
-                  {(() => { const ChipIcon = categoryIcon(cat); return <ChipIcon size={rem(1)} color={on ? c.accent : c.textSecondary} />; })()}
+                  {(() => { const ChipIcon = categoryIcon(cat); return <ChipIcon size={rem(1)} color={catColor[cat] ?? c.textSecondary} />; })()}
                   <Text style={[styles.chipText, on && styles.chipTextOn]}>{cat}</Text>
                 </View>
               </Pressable>
@@ -165,15 +176,13 @@ export default function PurchaseDetail() {
         </Pressable>
       </View>
 
-      <Pressable onPress={() => router.push({ pathname: '/add', params: { id: expense.id } })} accessibilityRole="button"
-        accessibilityLabel="Edit name, amount, and details" style={({ pressed }) => [styles.button, pressed && styles.pressed]}>
-        <Text style={styles.buttonLabel}>Edit name, amount, and details</Text>
-      </Pressable>
-
-      <Pressable onPress={remove} accessibilityRole="button" accessibilityLabel="Delete purchase"
-        style={({ pressed }) => [styles.button, pressed && styles.pressed]}>
-        <Text style={styles.danger}>Delete purchase</Text>
-      </Pressable>
+      {/* Same left and right edges as the Note box and Save note button above. */}
+      <View style={{ paddingHorizontal: spacing[4], marginTop: spacing[4] }}>
+        <Pressable onPress={remove} accessibilityRole="button" accessibilityLabel="Delete purchase"
+          style={({ pressed }) => [styles.button, pressed && styles.pressed]}>
+          <Text style={styles.danger}>Delete purchase</Text>
+        </Pressable>
+      </View>
     </ScrollView>
   );
 }
