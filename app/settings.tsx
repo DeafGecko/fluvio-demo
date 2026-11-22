@@ -11,6 +11,7 @@ import { useTheme } from '../hooks/use-theme';
 import { loadDemoAccounts, seedDemoAccounts } from '../lib/accounts';
 import { seedDemoData } from '../lib/demo-data';
 import { setPref, usePrefs } from '../lib/prefs';
+import { showChoiceAlert } from '../lib/web-alert';
 
 // Figma: 19 Settings. Preferences rows and demo reset. Reached from Profile.
 export default function Settings() {
@@ -36,20 +37,20 @@ export default function Settings() {
   // Follows the phone unless the user picks Light or Dark for this app only.
   const APPEARANCE_LABEL = { system: 'System', light: 'Light', dark: 'Dark' } as const;
   const chooseAppearance = () => {
-    Alert.alert('Appearance', 'Choose how Fluvio looks. System follows your phone.', [
-      { text: 'System', onPress: () => setPref('appearance', 'system') },
-      { text: 'Light', onPress: () => setPref('appearance', 'light') },
-      { text: 'Dark', onPress: () => setPref('appearance', 'dark') },
+    showChoiceAlert('Appearance', 'Choose how Fluvio looks. System follows your phone.', [
+      { text: 'System', selected: prefs.appearance === 'system', onPress: () => setPref('appearance', 'system') },
+      { text: 'Light', selected: prefs.appearance === 'light', onPress: () => setPref('appearance', 'light') },
+      { text: 'Dark', selected: prefs.appearance === 'dark', onPress: () => setPref('appearance', 'dark') },
       { text: 'Cancel', style: 'cancel' },
     ]);
   };
 
   const LAYOUT_LABEL = { auto: 'Auto', phone: 'Mobile', tablet: 'Tablet' } as const;
   const chooseLayout = () => {
-    Alert.alert('Screen layout', 'Choose how wide the app shows its content.', [
-      { text: 'Auto', onPress: () => setPref('layout', 'auto') },
-      { text: 'Mobile', onPress: () => setPref('layout', 'phone') },
-      { text: 'Tablet', onPress: () => setPref('layout', 'tablet') },
+    showChoiceAlert('Screen layout', 'Choose how wide the app shows its content.', [
+      { text: 'Auto', selected: prefs.layout === 'auto', onPress: () => setPref('layout', 'auto') },
+      { text: 'Mobile', selected: prefs.layout === 'phone', onPress: () => setPref('layout', 'phone') },
+      { text: 'Tablet', selected: prefs.layout === 'tablet', onPress: () => setPref('layout', 'tablet') },
       { text: 'Cancel', style: 'cancel' },
     ]);
   };
