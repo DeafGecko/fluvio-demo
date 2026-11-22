@@ -41,6 +41,14 @@ function useWebPageFade() {
 export default function RootLayout() {
   const { c } = useTheme();
   const cover = useWebPageFade();
+  // Web only: paint the page behind the app in the theme's canvas color, so no white shows during screen changes.
+  useEffect(() => {
+    if (Platform.OS !== 'web') return;
+    const doc = (globalThis as any).document;
+    if (!doc) return;
+    doc.documentElement.style.backgroundColor = c.canvas;
+    doc.body.style.backgroundColor = c.canvas;
+  }, [c.canvas]);
   // Local usage log: counts each screen visit on this phone only (see lib/usage.ts).
   const pathname = usePathname();
   useEffect(() => { if (pathname) trackUse(`screen:${pathname}`); }, [pathname]);
