@@ -18,7 +18,7 @@ export default function TabsLayout() {
   return (
     <Tabs
       tabBar={(props) => <FluvioTabBar {...props} />}
-      screenOptions={{ headerShown: false, tabBarActiveTintColor: c.accent, tabBarInactiveTintColor: c.textTertiary }}
+      screenOptions={{ headerShown: false, tabBarActiveTintColor: c.accent, tabBarInactiveTintColor: c.textTertiary, sceneStyle: { backgroundColor: c.canvas } }}
     >
       <Tabs.Screen name="index" options={{ tabBarLabel: 'Home', tabBarIcon: ({ color }) => <HomeIcon size={rem(1.375)} color={color} /> }} />
       <Tabs.Screen name="activity" options={{ tabBarLabel: 'Activity', tabBarIcon: ({ color }) => <ArrowsRightLeftIcon size={rem(1.375)} color={color} /> }} />
