@@ -50,11 +50,13 @@ export function WebAlertHost() {
     input: { minHeight: rem(2.75), borderRadius: rem(0.625), borderWidth: 1, borderColor: c.border, paddingHorizontal: rem(0.75), color: c.textPrimary, fontSize: t.body.fontSize },
     // Buttons stack as full-width rows, so long labels never get squeezed.
     column: { flexDirection: 'column', gap: rem(0.5), marginTop: rem(0.25) },
-    btn: { minHeight: rem(3), borderRadius: rem(0.625), borderWidth: 1, borderColor: c.border, paddingHorizontal: rem(1), flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
+    // Label is centered in the button. The check mark sits at the right edge, outside the centering.
+    btn: { minHeight: rem(3), borderRadius: rem(0.625), borderWidth: 1, borderColor: c.border, paddingHorizontal: rem(2), alignItems: 'center', justifyContent: 'center' },
+    checkMark: { position: 'absolute', right: rem(1), top: 0, bottom: 0, justifyContent: 'center' },
     selectedRow: { backgroundColor: c.accentSoft, borderColor: c.accent },
     primary: { backgroundColor: c.accent, borderColor: c.accent },
     danger: { backgroundColor: c.danger, borderColor: c.danger },
-    btnText: { color: c.textPrimary, fontSize: font(1), fontWeight: '600', flexShrink: 1 },
+    btnText: { color: c.textPrimary, fontSize: font(1), fontWeight: '600', textAlign: 'center' },
     // Text on the filled buttons uses the theme's on-accent color: white in light mode, dark in dark mode.
     onColor: { color: c.onAccent },
   }), [c, t]);
@@ -86,7 +88,7 @@ export function WebAlertHost() {
                   onPress={() => { close(); b.onPress?.(req.prompt ? value : undefined); }}
                   style={[styles.btn, isPrimary && styles.primary, isDanger && styles.danger, isSelected && styles.selectedRow]}>
                   <Text style={[styles.btnText, (isPrimary || isDanger) && styles.onColor]}>{b.text}</Text>
-                  {isSelected && <CheckIcon size={rem(1.125)} color={c.accent} />}
+                  {isSelected && <View style={styles.checkMark}><CheckIcon size={rem(1.125)} color={c.accent} /></View>}
                 </Pressable>
               );
             })}
