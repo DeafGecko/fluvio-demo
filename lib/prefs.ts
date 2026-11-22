@@ -1,5 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useEffect, useState } from 'react';
+import { Platform } from 'react-native';
 
 // Saved user preferences. Stored on this device only.
 // Text size always comes from the phone. Light or dark follows the phone unless set here.
@@ -19,8 +20,22 @@ const DEFAULTS: Prefs = {
 };
 const KEY = 'prefs_v1';
 
+// On the web, saved prefs are read right away from local storage (the same place AsyncStorage keeps them),
+// so the very first screen already uses the saved light or dark theme instead of flashing the system theme.
+function readWebPrefsNow(): Prefs | null {
+  try {
+    const ls = (globalThis as any).localStorage;
+    const raw = ls ? ls.getItem(KEY) : null;
+    return raw ? { ...DEFAULTS, ...JSON.parse(raw) } : null;
+  } catch { return null; }
+}
+
 let current: Prefs = { ...DEFAULTS };
 let loaded = false;
+if (Platform.OS === 'web') {
+  const now = readWebPrefsNow();
+  if (now) { current = now; loaded = true; }
+}
 const listeners = new Set<(p: Prefs) => void>();
 
 async function ensureLoaded() {
