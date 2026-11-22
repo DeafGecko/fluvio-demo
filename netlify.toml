@@ -1,0 +1,10 @@
+# Netlify: publishes the prebuilt web app in web-demo/ as a static site.
+# No build command: web-demo/ is already built. Rebuild it with `npx expo export --platform web`
+# and copy _expo/ and assets/ into web-demo/ (keep index.html, boot.js, demo.js, _headers, _redirects).
+[build]
+  publish = "web-demo"
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Content-Type-Options = "nosniff"
