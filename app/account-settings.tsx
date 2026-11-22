@@ -65,7 +65,7 @@ export default function AccountSettings() {
   return (
     <ScrollView style={styles.screen} contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
       <SavedPopout visible={savedOpen} message="Saved" />
-      <BackLink label="Profile" onPress={() => router.back()} />
+      <BackLink label="Profile" onPress={() => router.replace('/')} />
       <Text style={styles.heading} accessibilityRole="header">Account settings</Text>
       <Text style={styles.sub}>Demo accounts only.</Text>
 

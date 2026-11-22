@@ -72,7 +72,7 @@ export default function Settings() {
 
   return (
     <ScrollView style={styles.screen} contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
-      <BackLink label="Profile" onPress={() => router.back()} />
+      <BackLink label="Profile" onPress={() => router.replace('/')} />
       <Text style={styles.heading} accessibilityRole="header">Settings</Text>
 
       <Text style={styles.sectionLabel} accessibilityRole="header">Profile</Text>

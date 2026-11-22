@@ -104,7 +104,7 @@ export default function Profile() {
   return (
     <ScrollView style={styles.screen} contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
       <SavedPopout visible={savedOpen} message="Name saved" />
-      <BackLink label="Home" onPress={() => router.back()} />
+      <BackLink label="Home" onPress={() => router.replace('/')} />
       <Text style={styles.heading} accessibilityRole="header">Profile</Text>
 
       <View style={styles.profile}>

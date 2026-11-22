@@ -21,7 +21,7 @@ export default function Help() {
 
   return (
     <ScrollView style={styles.screen} contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
-      <BackLink label="Settings" onPress={() => router.back()} />
+      <BackLink label="Settings" onPress={() => router.replace('/')} />
       <Text style={styles.heading} accessibilityRole="header">Help & support</Text>
 
       <SettingsGroup>

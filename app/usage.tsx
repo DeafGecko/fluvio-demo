@@ -74,7 +74,7 @@ export default function Usage() {
 
   return (
     <ScrollView style={styles.screen} contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
-      <BackLink label="Settings" onPress={() => router.back()} />
+      <BackLink label="Settings" onPress={() => router.replace('/')} />
       <Text style={styles.heading} accessibilityRole="header">Usage on this device</Text>
       <Text style={styles.note}>
         Counts stay on this phone and are never sent anywhere. Most used is at the top. Not used yet means no visits or taps are logged.
