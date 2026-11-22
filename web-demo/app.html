@@ -34,9 +34,10 @@
     <meta name="apple-mobile-web-app-title" content="Fluvio" />
     <meta name="apple-mobile-web-app-status-bar-style" content="default" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
-      <style id="fluvio-canvas">
+      <script src="/theme-init.js"></script>
+    <style id="fluvio-canvas">
       html, body { background-color: #F7F8F7; }
-      @media (prefers-color-scheme: dark) { html, body { background-color: #141B1F; } }
+      html[data-theme="dark"], html[data-theme="dark"] body { background-color: #141B1F; }
     </style>
   </head>
 

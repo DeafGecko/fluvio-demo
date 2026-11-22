@@ -28,9 +28,11 @@
   .phone { justify-self:center; height:min(832px, calc(100vh - 96px)); aspect-ratio: 414 / 880; max-width:100%; border-radius:48px; background:#111; padding:18px; box-shadow:0 20px 60px rgba(0,0,0,.25); }
   .screen { position:relative; width:100%; height:100%; border-radius:32px; overflow:hidden; background:#F7F8F7; }
   iframe { position:absolute; top:0; left:0; width:100%; height:100%; border:0; display:block; background:#F7F8F7; }
-  @media (prefers-color-scheme: dark) { iframe { background:#141B1F; } }
+  html[data-theme="dark"] iframe { background:#141B1F; }
+  html[data-theme="light"] iframe { background:#F7F8F7; }
   .phone { position:relative; transition: all .45s cubic-bezier(.4,0,.2,1); }
-  @media (prefers-color-scheme: dark) { .screen { background:#141B1F; } }
+  html[data-theme="dark"] .screen { background:#141B1F; }
+  html[data-theme="light"] .screen { background:#F7F8F7; }
   .island { position:absolute; top:26px; left:50%; transform:translateX(-50%); width:124px; height:36px; border-radius:20px; background:#000; z-index:5; pointer-events:none; }
   .phone.tablet .island { display:none; }
   .status { position:absolute; top:0; left:0; right:0; height:54px; padding:0 34px 0 42px; display:flex; align-items:center; justify-content:space-between; color:#000; font-weight:600; font-size:16px; z-index:4; pointer-events:none; }
@@ -70,6 +72,7 @@
     <meta name="apple-mobile-web-app-title" content="Fluvio" />
     <meta name="apple-mobile-web-app-status-bar-style" content="default" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <script src="/theme-init.js"></script>
   </head>
 <body>
 <main class="wrap">
