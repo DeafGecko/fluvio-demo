@@ -49,6 +49,7 @@
   "devDependencies": {
     "@axe-core/playwright": "^4.14.0",
     "@playwright/test": "^1.65.1",
+    "@rolldown/binding-linux-x64-gnu": "1.2.19",
     "@types/react": "~19.3.0",
     "chrome-launcher": "^1.2.3",
     "eslint": "^9.25.0",
