@@ -1,6 +1,6 @@
 # Fluvio — a learning project for building a mobile app
 
-Fluvio is a demo expense tracker for iPhone (and Android) that I built to learn how to take an app from an idea to working code. Every screen starts as a sketch, becomes a design in Figma, and then gets built in code with React Native and Expo.
+Fluvio is a completed demo expense tracker for iPhone (and Android) that I built to learn how to take an app from an idea to working code. Every screen starts as a sketch, becomes a design in Figma, and then gets built in code with React Native and Expo.
 
 Everything in the app is fictional. The banks, accounts, names, and amounts are made up, and no real bank is connected.
 
@@ -91,7 +91,9 @@ The same app runs in a browser. The website shows a landing page with the Fluvio
 
 The notes in `docs/` stay on this computer. The folder is listed in `.gitignore`, so it is not on GitHub. The main files are `docs/SECURITY-NOTES.md` (what was checked and what is still open) and `docs/FLUVIO-IMPLEMENTATION.md`.
 
-## Limits and what is not done yet
+## Limits and known gaps
+
+The demo is complete. These are the known gaps, kept on purpose or left for later:
 
 - Savings goals are not built yet.
 - The AI tips feature is switched off. The app no longer calls an AI service directly, so no key ships in the app. Turning it back on needs a server to hold the key.
