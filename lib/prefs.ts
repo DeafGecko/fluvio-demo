@@ -7,7 +7,7 @@ import { Platform } from 'react-native';
 export type Appearance = 'system' | 'light' | 'dark';
 
 export type Prefs = {
-  appearance: Appearance; // 'system' = follow the phone
+  appearance: Appearance; // starts on 'light'. 'system' = follow the phone
   notifications: boolean;
   hideAmounts: boolean;   // privacy: mask money amounts on Home
   pretendOffline: boolean; // demo: show the offline banner
@@ -16,7 +16,7 @@ export type Prefs = {
 };
 
 const DEFAULTS: Prefs = {
-  appearance: 'system', notifications: false, hideAmounts: false, pretendOffline: false, layout: 'auto', monthlyLimit: 2500,
+  appearance: 'light', notifications: false, hideAmounts: false, pretendOffline: false, layout: 'auto', monthlyLimit: 2500,
 };
 const KEY = 'prefs_v1';
 

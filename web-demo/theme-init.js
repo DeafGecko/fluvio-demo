@@ -4,10 +4,10 @@
   var dark;
   try {
     var raw = localStorage.getItem('prefs_v1');
-    var a = raw ? JSON.parse(raw).appearance : 'system';
+    var a = raw ? JSON.parse(raw).appearance : 'light';
     dark = a === 'dark' || (a !== 'light' && window.matchMedia('(prefers-color-scheme: dark)').matches);
   } catch (e) {
-    dark = !!(window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches);
+    dark = false;
   }
   document.documentElement.setAttribute('data-theme', dark ? 'dark' : 'light');
 })();
