@@ -66,8 +66,13 @@
   @media (max-width: 699px) {
     .wrap { justify-items:start; text-align:left; padding:24px 40px; }
     .brand { justify-self:stretch; }
-    .phone { display:none; }
-    .switch, .qr { display:none; }
+    /* Phones: show the same mock, Mobile/Tablet buttons, and QR card, sized to fit the screen width. */
+    .panel-right { height:auto; width:100%; padding:0; }
+    .phone { display:block; height:auto; width:min(100%, 340px); max-width:100%; justify-self:center; }
+    .phone.tablet { height:auto; width:min(100%, 340px); }
+    .switch { display:flex; }
+    .qr { display:flex; max-width:100%; width:100%; }
+    .wrap { padding:24px 20px 40px; }
     .fs-btn { display:inline-block; margin-top:20px; }
   }
 </style>
