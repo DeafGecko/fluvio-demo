@@ -15,6 +15,7 @@ import { loadUnreadCount } from '../../lib/notifications';
 import { DemoAccount, loadDemoAccounts, seedDemoAccounts } from '../../lib/accounts';
 import { thisMonth } from '../../lib/budget';
 import { QuickAdd } from '../../components/quick-add';
+import { SavedPopout } from '../../components/saved-popout';
 import { LimitSheet } from '../../components/limit-sheet';
 import { CATEGORY_NAMES, Expense, categoryIcon, formatUSD, loadExpenses, softDeleteExpense } from '../../lib/expenses';
 
@@ -66,9 +67,19 @@ export default function Home() {
     });
   }, []));
 
+  // Every change on Home shows the "Saved" toast in the top right corner.
+  const [savedOpen, setSavedOpen] = useState(false);
+  const [savedMessage, setSavedMessage] = useState('Saved');
+  const flashSaved = (message = 'Saved') => {
+    setSavedMessage(message);
+    setSavedOpen(true);
+    setTimeout(() => setSavedOpen(false), 1200);
+  };
+
   // Delete keeps the purchase in history (not erased for good).
   const handleDelete = async (id: string) => {
     await softDeleteExpense(id);
+    flashSaved('Deleted');
     setExpenses(await loadExpenses());
   };
 
@@ -331,8 +342,10 @@ export default function Home() {
       )}
       {/* Own component: keeps the typed amount, so typing does not redraw this screen. */}
       <LimitSheet key={limitOpen ? 'open' : 'closed'} visible={limitOpen} onClose={() => setLimitOpen(false)}
-        current={monthlyLimit} onSave={(v) => setPref('monthlyLimit', v)} />
-      <QuickAdd visible={quickOpen} onClose={() => setQuickOpen(false)} onSaved={reloadExpenses} onMoreDetails={() => router.push('/add')} />
+        current={monthlyLimit} onSave={(v) => { setPref('monthlyLimit', v); flashSaved('Limit saved'); }} />
+      <QuickAdd visible={quickOpen} onClose={() => setQuickOpen(false)}
+        onSaved={() => { reloadExpenses(); flashSaved('Purchase saved'); }} onMoreDetails={() => router.push('/add')} />
+      <SavedPopout visible={savedOpen} message={savedMessage} />
     </ScrollView>
   );
 }

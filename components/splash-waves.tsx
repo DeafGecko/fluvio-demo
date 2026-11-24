@@ -11,7 +11,7 @@ import { useTheme } from '../hooks/use-theme';
 //   ys:    vertical keyframes as fractions of the wave area height; the last one is 0 so the loop joins up
 //   yd:    duration of each keyframe move in ms
 const LAYERS = [
-  { top: 0.12, amp: 0.08, phase: 0.0, opacity: 0.25, duration: 10000, ys: [-0.07, 0.05, 0], yd: [4200, 3400, 3000] },
+  { top: 0.22, amp: 0.08, phase: 0.0, opacity: 0.25, duration: 10000, ys: [-0.05, 0.05, 0], yd: [4200, 3400, 3000] },
   { top: 0.32, amp: 0.08, phase: 1.6, opacity: 0.5, duration: 8000, ys: [0.06, -0.08, 0], yd: [3600, 4200, 2800] },
   { top: 0.52, amp: 0.08, phase: 3.2, opacity: 0.75, duration: 6500, ys: [-0.06, 0.07, 0], yd: [3000, 3800, 3300] },
   { top: 0.72, amp: 0.08, phase: 4.8, opacity: 1, duration: 5000, ys: [0.05, -0.06, 0], yd: [2800, 3300, 3600] },

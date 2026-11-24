@@ -37,6 +37,7 @@ export const DEMO_BANKS = [
   'Northstar Demo Bank',
   'Evergreen Credit Union (Demo)',
   'Harborline Financial (Demo)',
+  'Markoff Demo Bank',
   'Summit Demo Bank',
 ] as const;
 

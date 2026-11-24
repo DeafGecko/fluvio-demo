@@ -2,7 +2,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useState } from 'react';
 import { Text, View } from 'react-native';
-import { CheckCircleIcon } from 'react-native-heroicons/solid';
+import { HandThumbUpIcon } from 'react-native-heroicons/solid';
 import { Card, FirstRunScreen, PrimaryButton, SecondaryButton } from '../components/first-run-ui';
 import { spacing, rem } from '../constants/tokens';
 import { useTheme } from '../hooks/use-theme';
@@ -28,7 +28,7 @@ export default function ConnectionSuccess() {
     <FirstRunScreen>
       <View style={{ alignItems: 'center', marginTop: spacing[8] }}>
         <View style={{ width: rem(6), height: rem(6), borderRadius: rem(3), backgroundColor: c.surfaceMuted, alignItems: 'center', justifyContent: 'center' }}>
-          <CheckCircleIcon size={rem(3.5)} color={c.success} />
+          <HandThumbUpIcon size={rem(3.5)} color={c.success} />
         </View>
       </View>
       <Text style={{ color: c.textPrimary, fontSize: t.h1.fontSize, fontWeight: '700', textAlign: 'center', marginTop: spacing[4] }}

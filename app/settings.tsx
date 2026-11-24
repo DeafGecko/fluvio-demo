@@ -1,10 +1,11 @@
 import { useRouter } from 'expo-router';
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { Alert, ScrollView, StyleSheet, Text } from 'react-native';
 import {
   ArrowPathIcon, BellIcon, ChartBarIcon, DevicePhoneMobileIcon, InformationCircleIcon, MoonIcon, ShieldCheckIcon, UserIcon,
 } from 'react-native-heroicons/outline';
 import { BackLink, SettingsGroup, SettingsRow } from '../components/settings-ui';
+import { SavedPopout } from '../components/saved-popout';
 import { pickAvatar, removeAvatar } from '../lib/avatar';
 import { screenInset, spacing } from '../constants/tokens';
 import { useTheme } from '../hooks/use-theme';
@@ -18,6 +19,15 @@ export default function Settings() {
   const router = useRouter();
   const { c, t } = useTheme();
 
+  // Every change shows the "Saved" toast in the top right corner.
+  const [savedOpen, setSavedOpen] = useState(false);
+  const [savedMessage, setSavedMessage] = useState('Saved');
+  const flashSaved = (message = 'Saved') => {
+    setSavedMessage(message);
+    setSavedOpen(true);
+    setTimeout(() => setSavedOpen(false), 1200);
+  };
+
   const demoReset = () => {
     Alert.alert('Reset demo', 'Restore the sample purchases and statement. Accounts you added stay.', [
       { text: 'Cancel', style: 'cancel' },
@@ -27,6 +37,7 @@ export default function Settings() {
           // Keep accounts the user added. Only create the starting accounts if there are none.
           if ((await loadDemoAccounts()).length === 0) await seedDemoAccounts();
           await seedDemoData();
+          flashSaved('Demo reset');
         },
       },
     ]);
@@ -38,9 +49,9 @@ export default function Settings() {
   const APPEARANCE_LABEL = { system: 'System', light: 'Light', dark: 'Dark' } as const;
   const chooseAppearance = () => {
     showChoiceAlert('Appearance', 'Choose how Fluvio looks. System follows your phone.', [
-      { text: 'System', selected: prefs.appearance === 'system', onPress: () => setPref('appearance', 'system') },
-      { text: 'Light', selected: prefs.appearance === 'light', onPress: () => setPref('appearance', 'light') },
-      { text: 'Dark', selected: prefs.appearance === 'dark', onPress: () => setPref('appearance', 'dark') },
+      { text: 'System', selected: prefs.appearance === 'system', onPress: () => { setPref('appearance', 'system'); flashSaved(); } },
+      { text: 'Light', selected: prefs.appearance === 'light', onPress: () => { setPref('appearance', 'light'); flashSaved(); } },
+      { text: 'Dark', selected: prefs.appearance === 'dark', onPress: () => { setPref('appearance', 'dark'); flashSaved(); } },
       { text: 'Cancel', style: 'cancel' },
     ]);
   };
@@ -48,14 +59,16 @@ export default function Settings() {
   const LAYOUT_LABEL = { auto: 'Auto', phone: 'Mobile', tablet: 'Tablet' } as const;
   const chooseLayout = () => {
     showChoiceAlert('Screen layout', 'Choose how wide the app shows its content.', [
-      { text: 'Auto', selected: prefs.layout === 'auto', onPress: () => setPref('layout', 'auto') },
-      { text: 'Mobile', selected: prefs.layout === 'phone', onPress: () => setPref('layout', 'phone') },
-      { text: 'Tablet', selected: prefs.layout === 'tablet', onPress: () => setPref('layout', 'tablet') },
+      { text: 'Auto', selected: prefs.layout === 'auto', onPress: () => { setPref('layout', 'auto'); flashSaved(); } },
+      { text: 'Mobile', selected: prefs.layout === 'phone', onPress: () => { setPref('layout', 'phone'); flashSaved(); } },
+      { text: 'Tablet', selected: prefs.layout === 'tablet', onPress: () => { setPref('layout', 'tablet'); flashSaved(); } },
       { text: 'Cancel', style: 'cancel' },
     ]);
   };
 
-  const toggleNotifications = () => setPref('notifications', !prefs.notifications);
+  const toggleNotifications = () => { setPref('notifications', !prefs.notifications); flashSaved(); };
+
+  const toggleOfflineMessage = () => { setPref('pretendOffline', !prefs.pretendOffline); flashSaved(); };
 
   const privacyInfo = () =>
     Alert.alert('Privacy & data', 'Everything in this app is fictional. Your demo data stays on this device. No bank is contacted.');
@@ -72,6 +85,7 @@ export default function Settings() {
 
   return (
     <ScrollView style={styles.screen} contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
+      <SavedPopout visible={savedOpen} message={savedMessage} />
       <BackLink label="Profile" onPress={() => router.replace('/')} />
       <Text style={styles.heading} accessibilityRole="header">Settings</Text>
 
@@ -79,8 +93,15 @@ export default function Settings() {
       <SettingsGroup>
         <SettingsRow Icon={UserIcon} title="Profile photo" subtitle="Upload a photo or remove it" last
           onPress={() => Alert.alert('Profile photo', 'Choose what to do with your photo.', [
-            { text: 'Upload photo', onPress: () => { pickAvatar().catch(() => Alert.alert('Could not open photos', 'Allow photo access in Settings and try again.')); } },
-            { text: 'Remove photo', style: 'destructive', onPress: () => { removeAvatar(); } },
+            {
+              text: 'Upload photo',
+              onPress: () => {
+                pickAvatar()
+                  .then((saved) => { if (saved) flashSaved('Photo saved'); })
+                  .catch(() => Alert.alert('Could not open photos', 'Allow photo access in Settings and try again.'));
+              },
+            },
+            { text: 'Remove photo', style: 'destructive', onPress: () => { removeAvatar(); flashSaved('Photo removed'); } },
             { text: 'Cancel', style: 'cancel' },
           ])} />
       </SettingsGroup>
@@ -104,7 +125,7 @@ export default function Settings() {
       <Text style={styles.sectionLabel} accessibilityRole="header">Demo</Text>
       <SettingsGroup>
         <SettingsRow Icon={ArrowPathIcon} title="Show offline message" subtitle="Shows the offline message on Home"
-          value={prefs.pretendOffline ? 'On' : 'Off'} onPress={() => setPref('pretendOffline', !prefs.pretendOffline)} />
+          value={prefs.pretendOffline ? 'On' : 'Off'} onPress={toggleOfflineMessage} />
         <SettingsRow Icon={ChartBarIcon} title="Usage on this device" subtitle="Which screens and buttons are used"
           onPress={() => router.push('/usage')} />
         <SettingsRow Icon={ArrowPathIcon} title="Reset demo" subtitle="Restore fictional data" onPress={demoReset} />
