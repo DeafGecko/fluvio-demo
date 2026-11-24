@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { BackLink } from './settings-ui';
-import { minTarget, radius, screenInset, spacing } from '../constants/tokens';
+import { minTarget, radius, screenInset, spacing, rem, font } from '../constants/tokens';
 import { useTheme } from '../hooks/use-theme';
 
 // Shared layout for the first-run screens (Welcome through Connection).
@@ -29,10 +29,10 @@ export function PrimaryButton({ label, onPress, disabled, a11y }: { label: strin
     <Pressable onPress={onPress} disabled={disabled} accessibilityRole="button" accessibilityLabel={a11y ?? label}
       accessibilityState={{ disabled: !!disabled }}
       style={({ pressed }) => ({
-        minHeight: 52, borderRadius: 14, backgroundColor: c.accent, alignItems: 'center', justifyContent: 'center',
+        minHeight: rem(3.25), borderRadius: rem(0.875), backgroundColor: c.accent, alignItems: 'center', justifyContent: 'center',
         marginTop: spacing[3], opacity: disabled ? 0.5 : pressed ? 0.85 : 1,
       })}>
-      <Text style={{ color: c.onAccent, fontSize: 17, fontWeight: '600' }}>{label}</Text>
+      <Text style={{ color: c.onAccent, fontSize: font(1.0625), fontWeight: '600' }}>{label}</Text>
     </Pressable>
   );
 }
@@ -42,10 +42,10 @@ export function SecondaryButton({ label, onPress, a11y }: { label: string; onPre
   return (
     <Pressable onPress={onPress} accessibilityRole="button" accessibilityLabel={a11y ?? label}
       style={({ pressed }) => ({
-        minHeight: 52, borderRadius: 14, borderWidth: 1, borderColor: c.cardBorder, backgroundColor: c.surface,
+        minHeight: rem(3.25), borderRadius: rem(0.875), borderWidth: 1, borderColor: c.cardBorder, backgroundColor: c.surface,
         alignItems: 'center', justifyContent: 'center', marginTop: spacing[3], opacity: pressed ? 0.85 : 1,
       })}>
-      <Text style={{ color: c.textPrimary, fontSize: 17, fontWeight: '600' }}>{label}</Text>
+      <Text style={{ color: c.textPrimary, fontSize: font(1.0625), fontWeight: '600' }}>{label}</Text>
     </Pressable>
   );
 }

@@ -4,14 +4,14 @@ import { Card, FirstRunScreen, PrimaryButton, SecondaryButton } from '../compone
 import { ArrowsRightLeftIcon, ChartPieIcon, ShieldCheckIcon } from 'react-native-heroicons/outline';
 import { useTheme } from '../hooks/use-theme';
 import { FluvioLogo } from '../components/fluvio-logo';
-import { spacing } from '../constants/tokens';
+import { spacing, rem } from '../constants/tokens';
 
 // One feature line inside the card: an icon and a short sentence.
 function Row({ Icon, color, title, last }: { Icon: any; color: string; title: string; last?: boolean }) {
   const { c, t } = useTheme();
   return (
     <View style={{ flexDirection: 'row', alignItems: 'center', gap: spacing[3], paddingVertical: spacing[3], borderBottomWidth: last ? 0 : 1, borderBottomColor: c.border }}>
-      <Icon size={22} color={color} />
+      <Icon size={rem(1.375)} color={color} />
       <Text style={{ color: c.textPrimary, fontSize: t.body.fontSize, fontWeight: '600', flex: 1 }}>{title}</Text>
     </View>
   );
@@ -23,7 +23,7 @@ export default function Welcome() {
   const { c, t } = useTheme();
   return (
     <FirstRunScreen>
-      <FluvioLogo size={96} />
+      <FluvioLogo size={rem(6)} />
       <Text style={{ color: c.textPrimary, fontSize: t.h1.fontSize, fontWeight: '700', lineHeight: t.h1.lineHeight, marginTop: spacing[6] }}
         accessibilityRole="header">Welcome to Fluvio</Text>
       <Text style={{ color: c.textSecondary, fontSize: t.body.fontSize, lineHeight: t.body.lineHeight, marginTop: spacing[3] }}>

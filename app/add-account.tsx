@@ -3,7 +3,7 @@ import { parseAmount } from '../lib/amount';
 import { useMemo, useState } from 'react';
 import { Alert, Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
 import { BackLink } from '../components/settings-ui';
-import { minTarget, radius, screenInset, spacing } from '../constants/tokens';
+import { minTarget, radius, screenInset, spacing, rem, font } from '../constants/tokens';
 import { useTheme } from '../hooks/use-theme';
 import { addDemoAccount, DEMO_BANKS } from '../lib/accounts';
 
@@ -45,7 +45,7 @@ export default function AddAccount() {
     heading: { color: c.textPrimary, fontSize: t.h1.fontSize, fontWeight: t.h1.fontWeight, lineHeight: t.h1.lineHeight, marginTop: spacing[2] },
     label: { color: c.textPrimary, fontSize: t.secondary.fontSize, fontWeight: '600', marginTop: spacing[5], marginBottom: spacing[2] },
     chip: {
-      minHeight: 44, borderRadius: radius.pill, borderWidth: 1, borderColor: c.border,
+      minHeight: rem(2.75), borderRadius: radius.pill, borderWidth: 1, borderColor: c.border,
       backgroundColor: c.surface, paddingHorizontal: spacing[3], justifyContent: 'center', marginRight: spacing[2], marginBottom: spacing[2],
     },
     chipOn: { borderColor: c.accent, backgroundColor: c.accentSoft },
@@ -57,9 +57,9 @@ export default function AddAccount() {
     },
     hint: { color: c.textSecondary, fontSize: t.caption.fontSize, marginTop: spacing[2] },
     save: {
-      minHeight: 52, borderRadius: 14, backgroundColor: c.accent, alignItems: 'center', justifyContent: 'center', marginTop: spacing[8],
+      minHeight: rem(3.25), borderRadius: rem(0.875), backgroundColor: c.accent, alignItems: 'center', justifyContent: 'center', marginTop: spacing[8],
     },
-    saveLabel: { color: c.onAccent, fontSize: 17, fontWeight: '600' },
+    saveLabel: { color: c.onAccent, fontSize: font(1.0625), fontWeight: '600' },
     disabled: { opacity: 0.5 },
     pressed: { opacity: 0.85 },
     note: { color: c.textSecondary, fontSize: t.caption.fontSize, lineHeight: t.caption.lineHeight, marginTop: spacing[4], textAlign: 'center' },

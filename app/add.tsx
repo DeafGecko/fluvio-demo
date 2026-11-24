@@ -5,11 +5,12 @@ import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useEffect, useMemo, useState } from 'react';
 import { Alert, Platform, Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
 import { CheckIcon } from 'react-native-heroicons/outline';
-import { minTarget, radius, screenInset, spacing } from '../constants/tokens';
+import { isLargeText, minTarget, radius, screenInset, spacing, rem } from '../constants/tokens';
 import { useTheme } from '../hooks/use-theme';
 import { CATEGORY_NAMES, Expense, STORAGE_KEY, addCustomCategory, categoryIcon, formatUSD, loadCustomCategories, loadExpenses, readAllExpenses } from '../lib/expenses';
 import { findPaidThisMonth } from '../lib/subscriptions';
 import { SavedPopout } from '../components/saved-popout';
+import { recordSave } from '../lib/usage';
 import { ErrorPopout } from '../components/status-popout';
 
 // Short date for a new purchase, for example "Nov 18". Called when a purchase is saved.
@@ -107,8 +108,10 @@ export default function AddExpense() {
           ? { ...e, name: newExpense.name, amount: newExpense.amount, category: newExpense.category, note: newExpense.note }
           : e));
         await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
+        recordSave('Edit purchase form', newExpense.category);
       } else {
         await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify([...existing, newExpense]));
+        recordSave('Add expense form', newExpense.category);
       }
       setSaved(true);
       setTimeout(() => router.back(), 1800);
@@ -135,17 +138,18 @@ export default function AddExpense() {
     },
     dollar: { color: c.textSecondary, fontSize: t.h2.fontSize, fontWeight: t.h2.fontWeight, marginRight: spacing[1] },
     amountInput: { flex: 1, color: c.textPrimary, fontSize: t.h2.fontSize, fontWeight: t.h2.fontWeight, paddingVertical: spacing[3], fontVariant: ['tabular-nums'] },
-    noteInput: { minHeight: 96, paddingTop: spacing[3], textAlignVertical: 'top' },
+    noteInput: { minHeight: rem(6), paddingTop: spacing[3], textAlignVertical: 'top' },
     grid: { flexDirection: 'row', flexWrap: 'wrap', gap: spacing[2] },
     cat: {
-      minHeight: minTarget, minWidth: '47%', flexGrow: 1, borderRadius: radius.md, borderWidth: 1, borderColor: c.border,
+      // Large text: one category per row, so names like Entertainment fit on one line.
+      minHeight: minTarget, minWidth: isLargeText ? '100%' : '47%', flexGrow: 1, borderRadius: radius.md, borderWidth: 1, borderColor: c.border,
       backgroundColor: c.surface, paddingHorizontal: spacing[3], flexDirection: 'row', alignItems: 'center', gap: spacing[2],
     },
     catSelected: { borderColor: c.accent, borderWidth: 2 },
     catLabel: { color: c.textPrimary, fontSize: t.body.fontSize, fontWeight: '600', flex: 1 },
-    check: { width: 20 },
+    check: { width: rem(1.25) },
     save: {
-      minHeight: minTarget, borderRadius: radius.md, backgroundColor: c.accent, marginTop: spacing[8],
+      minHeight: minTarget, borderRadius: radius.md, backgroundColor: c.accent, marginTop: spacing[8], paddingVertical: spacing[2],
       flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: spacing[2], paddingHorizontal: spacing[4],
     },
     saveLabel: { color: c.onAccent, fontSize: t.bodyStrong.fontSize, fontWeight: t.bodyStrong.fontWeight },
@@ -199,7 +203,7 @@ export default function AddExpense() {
 
       <Text style={styles.label}>Category</Text>
       <Pressable onPress={newCategory} accessibilityRole="button" accessibilityLabel="Add a new category"
-        style={({ pressed }) => [{ minHeight: 44, alignSelf: 'flex-start', borderRadius: 12, borderWidth: 1, borderStyle: 'dashed', borderColor: c.accent, paddingHorizontal: spacing[3], justifyContent: 'center', marginBottom: spacing[2] }, pressed && { opacity: 0.85 }]}>
+        style={({ pressed }) => [{ minHeight: rem(2.75), alignSelf: 'flex-start', borderRadius: rem(0.75), borderWidth: 1, borderStyle: 'dashed', borderColor: c.accent, paddingHorizontal: spacing[3], justifyContent: 'center', marginBottom: spacing[2] }, pressed && { opacity: 0.85 }]}>
         <Text style={{ color: c.accent, fontSize: t.bodyStrong.fontSize, fontWeight: '600' }}>+ New category</Text>
       </Pressable>
       <View style={styles.grid} accessibilityRole="radiogroup">
@@ -212,9 +216,9 @@ export default function AddExpense() {
               accessibilityRole="radio" accessibilityLabel={cat}
               accessibilityState={{ checked: selected }} aria-checked={selected}
               onPress={() => setSelectedCategory(cat)}>
-              <Icon size={20} color={catColor[cat] ?? '#94a3b8'} />
+              <Icon size={rem(1.25)} color={catColor[cat] ?? '#94a3b8'} />
               <Text style={styles.catLabel}>{cat}</Text>
-              {selected && <CheckIcon size={20} color={c.accent} />}
+              {selected && <CheckIcon size={rem(1.25)} color={c.accent} />}
             </Pressable>
           );
         })}

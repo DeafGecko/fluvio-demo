@@ -3,7 +3,7 @@ import { useMemo } from 'react';
 import { Alert, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { ChatBubbleLeftIcon, InformationCircleIcon, ShieldCheckIcon } from 'react-native-heroicons/outline';
 import { BackLink, SettingsGroup, SettingsRow } from '../components/settings-ui';
-import { radius, screenInset, spacing } from '../constants/tokens';
+import { radius, screenInset, spacing, rem } from '../constants/tokens';
 import { useTheme } from '../hooks/use-theme';
 
 // Figma: 40 Help & Support. Demo only; nothing is sent anywhere.
@@ -21,7 +21,7 @@ export default function Help() {
 
   return (
     <ScrollView style={styles.screen} contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
-      <BackLink label="Settings" onPress={() => router.back()} />
+      <BackLink label="Settings" onPress={() => router.replace('/')} />
       <Text style={styles.heading} accessibilityRole="header">Help & support</Text>
 
       <SettingsGroup>
@@ -35,7 +35,7 @@ export default function Help() {
       </SettingsGroup>
 
       <View style={styles.note}>
-        <InformationCircleIcon size={20} color={c.textPrimary} />
+        <InformationCircleIcon size={rem(1.25)} color={c.textPrimary} />
         <Text style={styles.noteText}>Fluvio is a portfolio demo, not a bank. It does not give financial advice.</Text>
       </View>
     </ScrollView>

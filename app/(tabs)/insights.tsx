@@ -4,8 +4,8 @@ import { usePrefs } from '../../lib/prefs';
 import { useCallback, useMemo, useState } from 'react';
 import { ActivityIndicator, Dimensions, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { PieChart } from 'react-native-chart-kit';
-import { ArrowPathIcon, CpuChipIcon, SparklesIcon } from 'react-native-heroicons/outline';
-import { minTarget, radius, screenInset, spacing } from '../../constants/tokens';
+import { ArrowPathIcon, ChevronRightIcon, CpuChipIcon, SparklesIcon } from 'react-native-heroicons/outline';
+import { minTarget, radius, screenInset, spacing, rem } from '../../constants/tokens';
 import { useTheme } from '../../hooks/use-theme';
 import { CATEGORY_ICONS, Expense, formatUSD, loadExpenses, totalsByCategory } from '../../lib/expenses';
 import { thisMonth } from '../../lib/budget';
@@ -53,11 +53,12 @@ export default function Insights() {
     content: { paddingHorizontal: screenInset, paddingTop: spacing[16], paddingBottom: spacing[12] },
     heading: { color: c.textPrimary, fontSize: t.h1.fontSize, fontWeight: t.h1.fontWeight, lineHeight: t.h1.lineHeight },
     sub: { color: c.textSecondary, fontSize: t.secondary.fontSize, lineHeight: t.secondary.lineHeight, marginTop: spacing[1], marginBottom: spacing[6] },
-    stats: { flexDirection: 'row', gap: spacing[2], marginBottom: spacing[8] },
+    stats: { flexDirection: 'row', gap: spacing[2], marginBottom: spacing[5] },
     stat: {
       flex: 1, backgroundColor: c.surface, borderRadius: radius.md, borderWidth: 1, borderColor: c.cardBorder,
-      padding: spacing[3], minHeight: 96, justifyContent: 'space-between', alignItems: 'flex-start',
+      padding: spacing[2], justifyContent: 'flex-start', alignItems: 'flex-start',
     },
+    monthLabel: { color: c.textPrimary, fontSize: t.bodyStrong.fontSize, fontWeight: '700', marginBottom: spacing[2] },
     statLabel: { color: c.textSecondary, fontSize: t.caption.fontSize, lineHeight: t.caption.lineHeight, fontWeight: '600', textAlign: 'left' },
     statValue: { color: c.textPrimary, fontSize: t.bodyStrong.fontSize, fontWeight: '700', fontVariant: ['tabular-nums'], textAlign: 'left', alignSelf: 'stretch' },
     sectionTitle: { color: c.textPrimary, fontSize: t.h3.fontSize, fontWeight: t.h3.fontWeight, lineHeight: t.h3.lineHeight, marginBottom: spacing[3] },
@@ -102,15 +103,16 @@ export default function Insights() {
         </View>
       ) : (
         <>
+          <Text style={styles.monthLabel} accessibilityRole="header">{new Date().toLocaleDateString('en-US', { month: 'long' })}</Text>
           <View style={styles.stats}>
             {[
-              { value: formatUSD(total), label: `Spent in ${new Date().toLocaleDateString('en-US', { month: 'long' })}` },
+              { value: formatUSD(total), label: 'Spent' },
               { value: `${monthExpenses.length}`, label: 'Purchased' },
               { value: topCategory ? topCategory[0] : 'Not available', label: 'Top spend' },
             ].map((item) => (
               <View key={item.label} style={styles.stat} accessible accessibilityLabel={`${item.label}: ${item.value}`}>
                 <Text style={styles.statLabel}>{item.label}</Text>
-                <View style={{ flex: 1, justifyContent: 'center' }}>
+                <View style={{ marginTop: spacing[1] }}>
                   <Text style={styles.statValue} numberOfLines={2} adjustsFontSizeToFit>{item.value}</Text>
                 </View>
               </View>
@@ -122,7 +124,7 @@ export default function Insights() {
             const pct = total > 0 ? ((topCategory[1] / total) * 100).toFixed(0) : '0';
             return (
               <View style={styles.tip} accessible accessibilityLabel={`Top category is ${topCategory[0]}, ${formatUSD(topCategory[1])}, ${pct} percent of total logged.`}>
-                <Icon size={20} color={catColor[topCategory[0]] ?? c.textSecondary} />
+                <Icon size={rem(1.25)} color={catColor[topCategory[0]] ?? c.textSecondary} />
                 <Text style={styles.tipText}>
                   Most of your logged spending is on {topCategory[0]}: {formatUSD(topCategory[1])} ({pct}%).
                 </Text>
@@ -134,11 +136,11 @@ export default function Insights() {
             <View style={{ backgroundColor: c.surface, borderRadius: radius.lg, padding: spacing[4], marginBottom: spacing[4], borderWidth: 1, borderColor: c.warning }}>
               <Pressable onPress={() => setDupOpen(true)} accessibilityRole="button"
                 accessibilityHint="Opens the list of charges"
-                style={{ minHeight: 44, justifyContent: 'center' }}>
+                style={{ minHeight: rem(2.75), justifyContent: 'center' }}>
                 <Text style={{ color: c.warning, fontSize: t.bodyStrong.fontSize, fontWeight: '700' }}>
                   Possible double subscriptions
                 </Text>
-                <Text style={{ color: c.accent, fontSize: t.caption.fontSize, fontWeight: '600', marginTop: 2 }}>
+                <Text style={{ color: c.accent, fontSize: t.caption.fontSize, fontWeight: '600', marginTop: rem(0.125) }}>
                   Tap to see charges
                 </Text>
               </Pressable>
@@ -159,7 +161,7 @@ export default function Insights() {
             </Text>
           </BottomSheet>
 
-          <BottomSheet visible={dupOpen} onClose={() => setDupOpen(false)} title="Possible double subscriptions" height={0.6}>
+          <BottomSheet visible={dupOpen} onClose={() => setDupOpen(false)} title="Possible double subscriptions" height={rem(0.0375)}>
             {findDuplicateSubscriptions(expenses).map((d) => (
               <Text key={`${d.name}-${d.month}`} style={{ color: c.textSecondary, fontSize: t.secondary.fontSize, lineHeight: t.secondary.lineHeight, marginBottom: spacing[2] }}>
                 {d.name}: charged {d.count} times in {d.month} ({formatUSD(d.total)}). Check if you need to cancel one.
@@ -177,9 +179,17 @@ export default function Insights() {
           {/* Pie chart shown directly on Insights. Labels show the amounts; a list follows below. */}
           <View style={{ backgroundColor: c.surface, borderWidth: 1, borderColor: c.cardBorder, borderRadius: radius.lg, padding: spacing[3], marginBottom: spacing[4] }}
             accessibilityLabel="Spending by category pie chart">
-            <Text style={{ color: c.textPrimary, fontSize: t.bodyStrong.fontSize, fontWeight: '600', marginBottom: spacing[2] }}>
-              Spending by category
-            </Text>
+            <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginBottom: spacing[2] }}>
+              <Text style={{ color: c.textPrimary, fontSize: t.bodyStrong.fontSize, fontWeight: '600' }}>
+                Spending by category
+              </Text>
+              <Pressable onPress={() => router.push('/stats')} accessibilityRole="button"
+                accessibilityLabel="Open spending breakdown" accessibilityHint="Shows each category and day in detail"
+                style={{ flexDirection: 'row', alignItems: 'center', gap: spacing[1], minHeight: minTarget, paddingLeft: spacing[2] }}>
+                <Text style={{ color: c.accent, fontSize: t.secondary.fontSize, fontWeight: '600' }}>Breakdown</Text>
+                <ChevronRightIcon size={rem(1)} color={c.accent} />
+              </Pressable>
+            </View>
             <PieChart
               data={Object.entries(categoryTotals).map(([category, amount]) => ({
                 name: category,
@@ -189,7 +199,7 @@ export default function Insights() {
                 legendFontSize: 12,
               }))}
               width={Dimensions.get('window').width - screenInset * 2 - spacing[6]}
-              height={170}
+              height={rem(10.625)}
               chartConfig={{ color: (o = 1) => `rgba(32,40,45,${o})` }}
               accessor="amount"
               backgroundColor="transparent"
@@ -201,20 +211,13 @@ export default function Insights() {
           <Pressable style={({ pressed }) => [styles.secondaryRow, pressed && styles.pressed]}
             accessibilityRole="button" accessibilityLabel="Open bills" onPress={() => router.push('/bills')}>
             <Text style={styles.secondaryLabel}>Bills</Text>
-            <Text style={{ color: c.accent, fontWeight: '600' }}>Open</Text>
+            <ChevronRightIcon size={rem(1.25)} color={c.accent} />
           </Pressable>
 
           <Pressable style={({ pressed }) => [styles.secondaryRow, pressed && styles.pressed]}
-            accessibilityRole="button" accessibilityLabel="Open money journey" onPress={() => router.push('/journey')}>
-            <Text style={styles.secondaryLabel}>Money in and out</Text>
-            <Text style={{ color: c.accent, fontWeight: '600' }}>Open</Text>
-          </Pressable>
-
-          <Pressable style={({ pressed }) => [styles.secondaryRow, pressed && styles.pressed]}
-            accessibilityRole="button" accessibilityLabel="See spending breakdown by category and day"
-            onPress={() => router.push('/stats')}>
-            <Text style={styles.secondaryLabel}>Spending breakdown</Text>
-            <Text style={{ color: c.accent, fontWeight: '600' }}>View</Text>
+            accessibilityRole="button" accessibilityLabel="Open history" onPress={() => router.push('/journey')}>
+            <Text style={styles.secondaryLabel}>History</Text>
+            <ChevronRightIcon size={rem(1.25)} color={c.accent} />
           </Pressable>
 
           <Text style={[styles.sectionTitle, { marginTop: spacing[8] }]} accessibilityRole="header">AI tips</Text>
@@ -232,7 +235,7 @@ export default function Insights() {
                 </View>
               ) : (
                 <View style={styles.row}>
-                  <CpuChipIcon size={20} color={c.onAccent} />
+                  <CpuChipIcon size={rem(1.25)} color={c.onAccent} />
                   <Text style={styles.primaryLabel}>Get AI tips</Text>
                 </View>
               )}
@@ -252,14 +255,14 @@ export default function Insights() {
             <>
               {tips.map((tip, i) => (
                 <View key={i} style={styles.tip}>
-                  <SparklesIcon size={20} color={c.accent} />
+                  <SparklesIcon size={rem(1.25)} color={c.accent} />
                   <Text style={styles.tipText}>{tip}</Text>
                 </View>
               ))}
               <Pressable style={({ pressed }) => [styles.secondaryRow, pressed && styles.pressed]}
                 onPress={handleGetInsights} accessibilityRole="button" accessibilityLabel="Refresh AI tips">
                 <View style={styles.row}>
-                  <ArrowPathIcon size={20} color={c.textPrimary} />
+                  <ArrowPathIcon size={rem(1.25)} color={c.textPrimary} />
                   <Text style={styles.secondaryLabel}>Refresh tips</Text>
                 </View>
               </Pressable>

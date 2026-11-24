@@ -2,6 +2,7 @@ import { Stack, usePathname } from 'expo-router';
 import { useEffect, useState } from 'react';
 import { AccessibilityInfo, Animated, Platform, View } from 'react-native';
 import { useTheme } from '../hooks/use-theme';
+import { trackUse } from '../lib/usage';
 import { usePrefs } from '../lib/prefs';
 import { installWebAlerts, WebAlertHost } from '../lib/web-alert';
 
@@ -40,6 +41,17 @@ function useWebPageFade() {
 export default function RootLayout() {
   const { c } = useTheme();
   const cover = useWebPageFade();
+  // Web only: paint the page behind the app in the theme's canvas color, so no white shows during screen changes.
+  useEffect(() => {
+    if (Platform.OS !== 'web') return;
+    const doc = (globalThis as any).document;
+    if (!doc) return;
+    doc.documentElement.style.backgroundColor = c.canvas;
+    doc.body.style.backgroundColor = c.canvas;
+  }, [c.canvas]);
+  // Local usage log: counts each screen visit on this phone only (see lib/usage.ts).
+  const pathname = usePathname();
+  useEffect(() => { if (pathname) trackUse(`screen:${pathname}`); }, [pathname]);
   // On iPad and other wide screens, keep the content in a centered column (about phone width up to 760 points).
   const { layout } = usePrefs();
   // Phone: 430 wide. Tablet: 834 wide (iPad). Auto: up to 760.
@@ -54,8 +66,8 @@ export default function RootLayout() {
         // Swipe from the left edge (or anywhere on iOS) to go back to the previous screen.
         gestureEnabled: true,
         fullScreenGestureEnabled: true,
-        // Every page slides up from the bottom; the splash fades in instead.
-        animation: 'slide_from_bottom',
+        // Every page slides in from the right, like a standard phone app; the splash fades in instead.
+        animation: 'slide_from_right',
         // Pages you are not looking at do not re-draw when the theme or settings change. This keeps Light/Dark switching fast.
         freezeOnBlur: true,
       }}>

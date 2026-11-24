@@ -1,36 +1,59 @@
 // Design tokens from the Expense Tracker Design System v1.0.
 // Keep names in sync with the Figma variables.
+import { PixelRatio } from 'react-native';
+
+// rem: sizes are in rem, where 1 rem = 16 px at the default text size.
+// The phone's Text Size setting scales it, so layout grows with the text.
+// Layout growth is capped: at the accessibility sizes (font scale up to ~3.1) full-scale
+// padding and icons would leave no room for the (already scaled) text on a phone screen.
+const layoutScale = Math.min(PixelRatio.getFontScale(), 1.3);
+export function rem(value: number): number {
+  return value * 16 * layoutScale;
+}
+
+// True at the accessibility text sizes. Rows with side-by-side text stack instead, so words don't break mid-word.
+export const isLargeText = PixelRatio.getFontScale() >= 1.6;
+
+// Max text growth for short labels in fixed-size controls (tab bar, chips, segments, keypad),
+// like iOS system tab bars. Pass as maxFontSizeMultiplier.
+export const compactTextScale = 1.5;
+
+// Text sizes: React Native already scales Text with the phone's setting, so these are not scaled again.
+export function font(value: number): number {
+  return value * 16;
+}
 
 export const spacing = {
-  1: 4, 2: 8, 3: 12, 4: 16, 5: 20,
-  6: 24, 8: 32, 10: 40, 12: 48, 16: 64,
+  1: rem(0.25), 2: rem(0.5), 3: rem(0.75), 4: rem(1), 5: rem(1.25),
+  6: rem(1.5), 8: rem(2), 10: rem(2.5), 12: rem(3), 16: rem(4),
 } as const;
 
 export const radius = {
-  sm: 8, md: 12, lg: 16, xl: 20, pill: 999,
+  sm: rem(0.5), md: rem(0.75), lg: rem(1), xl: rem(1.25), pill: 999,
 } as const;
 
+// Hairline borders stay 1 px so they remain thin on every screen.
 export const borderWidth = { subtle: 1 } as const;
 
-// Minimum comfortable touch target (48 x 48 dp).
-export const minTarget = 48;
+// Minimum comfortable touch target (3 rem, 48 px at default size).
+export const minTarget = rem(3);
 
 // Screen horizontal insets.
-export const screenInset = 24;
-export const screenInsetNarrow = 16;
+export const screenInset = rem(1.5);
+export const screenInsetNarrow = rem(1);
 
 export const colors = {
   light: {
     // Fluvio handoff, light theme (token values from Fluvio-handoff section 2).
     canvas: '#F7F8F7', surface: '#FFFFFF', surfaceMuted: '#E8ECEE',
     textPrimary: '#20282D', textSecondary: '#56636C', textTertiary: '#56636C',
-    border: '#858F97', cardBorder: '#858F97', avatarBorder: '#356B85', iconBadge: '#E3ECF1', accent: '#356B85', accentSoft: '#E3ECF1', accentLight: '#82B5CF',
+    border: '#858F97', cardBorder: '#858F97', avatarBorder: '#356B85', iconBadge: '#E3ECF1', iconBadgeStrong: '#BFD8E5', accent: '#356B85', accentSoft: '#E3ECF1', accentLight: '#82B5CF',
     onAccent: '#FFFFFF', success: '#2E6B4F', danger: '#9E3434', warning: '#7A5200',
     info: '#356B85', focus: '#82B5CF',
   },
   dark: {
     // Fluvio handoff, dark theme.
-    canvas: '#141B1F', surface: '#20282D', surfaceMuted: '#2A353B', cardBorder: 'transparent', avatarBorder: 'transparent', iconBadge: 'transparent',
+    canvas: '#141B1F', surface: '#20282D', surfaceMuted: '#2A353B', cardBorder: 'transparent', avatarBorder: 'transparent', iconBadge: 'transparent', iconBadgeStrong: '#2A3D48',
     textPrimary: '#F5F7F8', textSecondary: '#B4C4CC', textTertiary: '#B4C4CC',
     border: '#72878F', accent: '#82B5CF', accentSoft: '#2A3D48', accentLight: '#356B85',
     onAccent: '#141B1F', success: '#8FD3B0', danger: '#FFABAB', warning: '#F4CB75',
@@ -44,15 +67,15 @@ export type ThemeColors = { [K in keyof typeof colors.light]: string };
 // Type scale. Sizes are design intent; scaling is handled by the OS.
 // Weight 650 (h2) is not representable in React Native, so it uses 700.
 export const typography = {
-  display: { fontSize: 36, fontWeight: '700', lineHeight: 44 },
-  h1: { fontSize: 28, fontWeight: '700', lineHeight: 36 },
-  h2: { fontSize: 22, fontWeight: '700', lineHeight: 30 },
-  h3: { fontSize: 18, fontWeight: '600', lineHeight: 26 },
-  body: { fontSize: 16, fontWeight: '400', lineHeight: 24 },
-  bodyStrong: { fontSize: 16, fontWeight: '600', lineHeight: 24 },
-  secondary: { fontSize: 14, fontWeight: '400', lineHeight: 20 },
-  caption: { fontSize: 13, fontWeight: '500', lineHeight: 19 },
-  tabLabel: { fontSize: 12, fontWeight: '600', lineHeight: 17 },
+  display: { fontSize: font(2.25), fontWeight: '700', lineHeight: font(2.75) },
+  h1: { fontSize: font(1.75), fontWeight: '700', lineHeight: font(2.25) },
+  h2: { fontSize: font(1.375), fontWeight: '700', lineHeight: font(1.875) },
+  h3: { fontSize: font(1.125), fontWeight: '600', lineHeight: font(1.625) },
+  body: { fontSize: font(1), fontWeight: '400', lineHeight: font(1.5) },
+  bodyStrong: { fontSize: font(1), fontWeight: '600', lineHeight: font(1.5) },
+  secondary: { fontSize: font(0.875), fontWeight: '400', lineHeight: font(1.25) },
+  caption: { fontSize: font(0.8125), fontWeight: '500', lineHeight: font(1.1875) },
+  tabLabel: { fontSize: font(0.75), fontWeight: '600', lineHeight: font(1.0625) },
 } as const;
 
 // Category icon-badge colors. Always shown with a text label.

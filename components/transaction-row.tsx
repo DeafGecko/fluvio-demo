@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { useRouter } from 'expo-router';
 import { AccessibilityInfo, Animated, Pressable, StyleSheet, Text, View } from 'react-native';
 import { SwipeRow } from './swipe-row';
-import { minTarget, radius, spacing } from '../constants/tokens';
+import { isLargeText, minTarget, radius, spacing, rem } from '../constants/tokens';
 import { useTheme } from '../hooks/use-theme';
 import { usePrefs } from '../lib/prefs';
 import { CATEGORY_ICONS, Expense, formatSignedPurchase, formatUSD } from '../lib/expenses';
@@ -50,16 +50,18 @@ export function TransactionRow({ expense, index, onDelete }: Props) {
       flexDirection: 'row', alignItems: 'center', gap: spacing[3],
       minHeight: minTarget, marginBottom: spacing[2],
     },
-    badge: { width: 40, height: 40, borderRadius: radius.sm, alignItems: 'center', justifyContent: 'center' },
+    badge: { width: rem(2.5), height: rem(2.5), borderRadius: radius.sm, alignItems: 'center', justifyContent: 'center' },
     info: { flex: 1 },
     name: { color: c.textPrimary, fontSize: t.bodyStrong.fontSize, fontWeight: t.bodyStrong.fontWeight, lineHeight: t.bodyStrong.lineHeight },
-    meta: { color: c.textSecondary, fontSize: t.caption.fontSize, lineHeight: t.caption.lineHeight, marginTop: 2 },
+    meta: { color: c.textSecondary, fontSize: t.caption.fontSize, lineHeight: t.caption.lineHeight, marginTop: rem(0.125) },
     amount: { color: c.textPrimary, fontSize: t.bodyStrong.fontSize, fontWeight: t.bodyStrong.fontWeight, fontVariant: ['tabular-nums'] },
     deleteBtn: {
       width: minTarget, height: minTarget, borderRadius: radius.md,
       alignItems: 'center', justifyContent: 'center',
     },
   }), [c, t]);
+
+  const amountText = <Text style={styles.amount} numberOfLines={1} adjustsFontSizeToFit>{hideAmounts ? '••••••' : formatSignedPurchase(expense.amount)}</Text>;
 
   return (
     <EntranceRow index={index}>
@@ -74,14 +76,16 @@ export function TransactionRow({ expense, index, onDelete }: Props) {
           accessibilityHint="Tap for details. Swipe left for Edit and Delete."
           {...(hideAmounts ? { accessibilityLabel: `${expense.name}, ${expense.category}, ${expense.date}, amount hidden` } : {})}>
           <View style={[styles.badge, { backgroundColor: badge + tint }]} importantForAccessibility="no-hide-descendants" accessibilityElementsHidden>
-            <Icon size={20} color={c.textPrimary} />
+            <Icon size={rem(1.25)} color={c.textPrimary} />
           </View>
           <View style={styles.info}>
-            <Text style={styles.name} numberOfLines={2}>{expense.name}</Text>
+            <Text style={styles.name} numberOfLines={isLargeText ? undefined : 2}>{expense.name}</Text>
             <Text style={styles.meta}>Purchase · {expense.category}</Text>
             <Text style={styles.meta}>{expense.date}</Text>
+            {/* Large text: the amount goes under the name so the name column keeps its width. */}
+            {isLargeText && amountText}
           </View>
-          <Text style={styles.amount}>{hideAmounts ? '••••••' : formatSignedPurchase(expense.amount)}</Text>
+          {!isLargeText && amountText}
         </Pressable>
       </SwipeRow>
     </EntranceRow>

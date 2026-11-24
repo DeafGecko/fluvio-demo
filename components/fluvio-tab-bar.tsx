@@ -1,6 +1,6 @@
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { ArrowsRightLeftIcon, ChartBarIcon, HomeIcon, WalletIcon } from 'react-native-heroicons/outline';
-import { spacing } from '../constants/tokens';
+import { spacing, rem, font, compactTextScale } from '../constants/tokens';
 import { useTheme } from '../hooks/use-theme';
 
 // Figma "Tab bar": a rounded card with a border, four outline icons with labels.
@@ -24,10 +24,10 @@ export function FluvioTabBar({ state, navigateToTab }: Props) {
     wrap: { backgroundColor: c.canvas, paddingHorizontal: spacing[4], paddingBottom: spacing[4], paddingTop: spacing[2] },
     bar: {
       flexDirection: 'row', alignItems: 'stretch', padding: spacing[2],
-      backgroundColor: c.surface, borderWidth: 1, borderColor: c.cardBorder, borderRadius: 20,
+      backgroundColor: c.surface, borderWidth: 1, borderColor: c.cardBorder, borderRadius: rem(1.25),
     },
-    tab: { flex: 1, alignItems: 'center', justifyContent: 'center', gap: spacing[1], paddingVertical: spacing[1], minHeight: 48 },
-    label: { fontSize: 12, fontWeight: '600', lineHeight: 17 },
+    tab: { flex: 1, alignItems: 'center', justifyContent: 'center', gap: spacing[1], paddingVertical: spacing[1], minHeight: rem(3) },
+    label: { fontSize: font(0.75), fontWeight: '600', lineHeight: font(1.0625) },
     pressed: { opacity: 0.7 },
   });
 
@@ -51,8 +51,8 @@ export function FluvioTabBar({ state, navigateToTab }: Props) {
                 if (!focused) navigateToTab(route.key);
               }}
             >
-              <Icon size={24} color={color} />
-              <Text style={[styles.label, { color }]}>{label}</Text>
+              <Icon size={rem(1.5)} color={color} />
+              <Text style={[styles.label, { color }]} numberOfLines={1} maxFontSizeMultiplier={compactTextScale}>{label}</Text>
             </Pressable>
           );
         })}

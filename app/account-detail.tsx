@@ -2,7 +2,7 @@ import { useFocusEffect, useLocalSearchParams, useRouter } from 'expo-router';
 import { useCallback, useMemo, useState } from 'react';
 import { ActivityIndicator, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { BackLink } from '../components/settings-ui';
-import { screenInset, spacing } from '../constants/tokens';
+import { screenInset, spacing, rem, font } from '../constants/tokens';
 import { useTheme } from '../hooks/use-theme';
 import { DemoAccount, loadDemoAccounts, loadSyncedIds, markAccountSynced } from '../lib/accounts';
 import { formatUSD } from '../lib/expenses';
@@ -36,18 +36,18 @@ export default function AccountDetail() {
     content: { paddingHorizontal: screenInset, paddingTop: spacing[16], paddingBottom: spacing[12] },
     heading: { color: c.textPrimary, fontSize: t.h1.fontSize, fontWeight: t.h1.fontWeight, lineHeight: t.h1.lineHeight, marginTop: spacing[2] },
     sub: { color: c.textSecondary, fontSize: t.secondary.fontSize, marginTop: spacing[1] },
-    card: { backgroundColor: c.surface, borderRadius: 18, padding: spacing[4], marginTop: spacing[4], gap: spacing[2] },
+    card: { backgroundColor: c.surface, borderRadius: rem(1.125), padding: spacing[4], marginTop: spacing[4], gap: spacing[2] },
     label: { color: c.textSecondary, fontSize: t.caption.fontSize, fontWeight: '600' },
     value: { color: c.textPrimary, fontSize: t.bodyStrong.fontSize, fontWeight: '600', fontVariant: ['tabular-nums'] },
     big: { color: c.textPrimary, fontSize: t.h2.fontSize, fontWeight: '700', fontVariant: ['tabular-nums'] },
     ok: { color: c.success, fontSize: t.secondary.fontSize, fontWeight: '600' },
     warn: { color: c.warning, fontSize: t.secondary.fontSize, fontWeight: '600' },
     button: {
-      minHeight: 52, borderRadius: 14, borderWidth: 1, borderColor: c.cardBorder, backgroundColor: c.surface,
+      minHeight: rem(3.25), borderRadius: rem(0.875), borderWidth: 1, borderColor: c.cardBorder, backgroundColor: c.surface,
       alignItems: 'center', justifyContent: 'center', marginTop: spacing[3],
     },
     primary: { backgroundColor: c.accent, borderColor: c.accent },
-    buttonLabel: { color: c.textPrimary, fontSize: 17, fontWeight: '600' },
+    buttonLabel: { color: c.textPrimary, fontSize: font(1.0625), fontWeight: '600' },
     primaryLabel: { color: c.onAccent },
     pressed: { opacity: 0.85 },
     note: { color: c.textSecondary, fontSize: t.caption.fontSize, lineHeight: t.caption.lineHeight, marginTop: spacing[3] },

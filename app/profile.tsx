@@ -8,7 +8,7 @@ import {
 import { Avatar } from '../components/avatar';
 import { BackLink, SettingsGroup, SettingsRow } from '../components/settings-ui';
 import { SavedPopout } from '../components/saved-popout';
-import { radius, screenInset, spacing } from '../constants/tokens';
+import { radius, screenInset, spacing, rem, font } from '../constants/tokens';
 import { useTheme } from '../hooks/use-theme';
 import { readAllExpenses, saveExpenses } from '../lib/expenses';
 
@@ -88,29 +88,29 @@ export default function Profile() {
     content: { paddingHorizontal: screenInset, paddingTop: spacing[16], paddingBottom: spacing[12] },
     heading: { color: c.textPrimary, fontSize: t.h1.fontSize, fontWeight: t.h1.fontWeight, lineHeight: t.h1.lineHeight, marginTop: spacing[2], marginBottom: spacing[4] },
     profile: { flexDirection: centered ? 'column' : 'row', alignItems: 'center', gap: spacing[4], marginBottom: spacing[6] },
-    avatar: { width: 56, height: 56, borderRadius: 28, backgroundColor: c.accentSoft, alignItems: 'center', justifyContent: 'center' },
-    avatarLetter: { color: c.accent, fontSize: 20, fontWeight: '600' },
+    avatar: { width: rem(3.5), height: rem(3.5), borderRadius: rem(1.75), backgroundColor: c.accentSoft, alignItems: 'center', justifyContent: 'center' },
+    avatarLetter: { color: c.accent, fontSize: font(1.25), fontWeight: '600' },
     profileName: { color: c.textPrimary, fontSize: t.bodyStrong.fontSize, fontWeight: t.bodyStrong.fontWeight, textAlign: centered ? 'center' : 'left' },
-    profileSub: { color: c.textSecondary, fontSize: t.secondary.fontSize, marginTop: 2, textAlign: centered ? 'center' : 'left' },
-    groupLabel: { color: c.textSecondary, fontSize: t.caption.fontSize, fontWeight: '600', letterSpacing: 0.6, marginTop: spacing[2], marginBottom: spacing[2], textTransform: 'uppercase' },
+    profileSub: { color: c.textSecondary, fontSize: t.secondary.fontSize, marginTop: rem(0.125), textAlign: centered ? 'center' : 'left' },
+    groupLabel: { color: c.textSecondary, fontSize: t.caption.fontSize, fontWeight: '600', letterSpacing: font(0.0375), marginTop: spacing[2], marginBottom: spacing[2], textTransform: 'uppercase' },
     signOut: {
-      minHeight: 48, borderRadius: radius.md, borderWidth: 1, borderColor: c.cardBorder, backgroundColor: c.surface,
+      minHeight: rem(3), borderRadius: radius.md, borderWidth: 1, borderColor: c.cardBorder, backgroundColor: c.surface,
       alignItems: 'center', justifyContent: 'center', marginTop: spacing[2],
     },
-    signOutLabel: { color: c.textPrimary, fontSize: 16, fontWeight: '500' },
+    signOutLabel: { color: c.textPrimary, fontSize: font(1), fontWeight: '500' },
     pressed: { opacity: 0.8 },
   }), [c, t, centered]);
 
   return (
     <ScrollView style={styles.screen} contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
       <SavedPopout visible={savedOpen} message="Name saved" />
-      <BackLink label="Home" onPress={() => router.back()} />
+      <BackLink label="Home" onPress={() => router.replace('/')} />
       <Text style={styles.heading} accessibilityRole="header">Profile</Text>
 
       <View style={styles.profile}>
-        <Avatar size={56} label="Profile photo. Tap to change in Settings" onPress={() => router.push('/settings')} />
+        <Avatar size={rem(3.5)} label="Profile photo. Tap to change in Settings" onPress={() => router.push('/settings')} />
         <Pressable onPress={editName} accessibilityRole="button" accessibilityHint="Name, tap to change"
-          style={{ flex: 1, minHeight: 44, justifyContent: 'center' }}>
+          style={{ flex: 1, minHeight: rem(2.75), justifyContent: 'center' }}>
           <Text style={styles.profileName}>{name || 'Fluvio'}</Text>
           <Text style={styles.profileSub}>Tap to change your name</Text>
           <Text style={styles.profileSub}>demo@fluvio.test (pretend)</Text>

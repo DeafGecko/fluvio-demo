@@ -7,13 +7,13 @@ import {
 } from '../../lib/expenses';
 import { TransactionRow } from '../../components/transaction-row';
 import { seedDemoData } from '../../lib/demo-data';
-import { minTarget, radius, screenInset, spacing } from '../../constants/tokens';
+import { minTarget, radius, screenInset, spacing, rem, font } from '../../constants/tokens';
 import { useTheme } from '../../hooks/use-theme';
 
 const ALL = 'All';
 
 export default function Activity() {
-  const { c, t } = useTheme();
+  const { c, t, cat: catColor } = useTheme();
   const router = useRouter();
   const [expenses, setExpenses] = useState<Expense[]>([]);
   const [loading, setLoading] = useState(true);
@@ -73,7 +73,8 @@ export default function Activity() {
     clearBtn: { width: minTarget, height: minTarget, alignItems: 'center', justifyContent: 'center' },
     chips: { flexDirection: 'row', flexWrap: 'wrap', gap: spacing[2], marginBottom: spacing[6] },
     chip: {
-      minHeight: 40, paddingHorizontal: spacing[3], borderRadius: radius.pill, flexDirection: 'row', alignItems: 'center', gap: 6,
+      // Same capsule as History: side padding and a short height.
+      paddingVertical: rem(0.375), paddingHorizontal: spacing[4], borderRadius: radius.pill, flexDirection: 'row', alignItems: 'center', gap: spacing[2],
       borderWidth: 1, borderColor: c.cardBorder, backgroundColor: c.surface, justifyContent: 'center',
     },
     chipSelected: { backgroundColor: c.accent, borderColor: c.accent },
@@ -87,21 +88,21 @@ export default function Activity() {
   }), [c, t]);
 
   if (loading) {
-    return <View style={styles.screen}><ActivityIndicator color={c.accent} style={{ marginTop: 80 }} accessibilityLabel="Loading activity" /></View>;
+    return <View style={styles.screen}><ActivityIndicator color={c.accent} style={{ marginTop: rem(5) }} accessibilityLabel="Loading activity" /></View>;
   }
 
   return (
     <ScrollView style={styles.screen} contentContainerStyle={styles.content} showsVerticalScrollIndicator={false} keyboardShouldPersistTaps="handled">
       <Text style={styles.heading} accessibilityRole="header">Activity</Text>
       <Pressable onPress={() => router.push('/search')} accessibilityRole="button" accessibilityLabel="Search and filter purchases"
-        style={{ minHeight: 44, justifyContent: 'center', marginBottom: spacing[3] }}>
+        style={{ minHeight: rem(2.75), justifyContent: 'center', marginBottom: spacing[3] }}>
         <Text style={{ color: c.accent, fontSize: t.bodyStrong.fontSize, fontWeight: '600' }}>Search and filter →</Text>
       </Pressable>
 
       {expenses.length > 0 && (
         <>
           <View style={styles.searchBar}>
-            <MagnifyingGlassIcon size={20} color={c.textSecondary} />
+            <MagnifyingGlassIcon size={rem(1.25)} color={c.textSecondary} />
             <TextInput
               style={styles.searchInput}
               placeholder="Search purchases"
@@ -113,7 +114,7 @@ export default function Activity() {
             />
             {search.length > 0 && (
               <Pressable style={styles.clearBtn} onPress={() => setSearch('')} accessibilityRole="button" accessibilityLabel="Clear search">
-                <XMarkIcon size={20} color={c.textSecondary} />
+                <XMarkIcon size={rem(1.25)} color={c.textSecondary} />
               </Pressable>
             )}
           </View>
@@ -129,7 +130,7 @@ export default function Activity() {
                   accessibilityLabel={name}
                   accessibilityState={{ checked: selected }} aria-checked={selected}
                   onPress={() => setFilter(name)}>
-                  {name !== ALL && (() => { const ChipIcon = categoryIcon(name); return <ChipIcon size={18} color={selected ? c.onAccent : c.textPrimary} strokeWidth={2.25} />; })()}
+                  {name !== ALL && (() => { const ChipIcon = categoryIcon(name); return <ChipIcon size={rem(1.125)} color={selected ? c.onAccent : (catColor[name] ?? c.textPrimary)} strokeWidth={2.25} />; })()}
                   <Text numberOfLines={1} style={[styles.chipLabel, selected && styles.chipLabelSelected]}>{name}</Text>
                 </Pressable>
               );
@@ -143,12 +144,12 @@ export default function Activity() {
           <Text style={styles.emptyTitle}>No purchases yet</Text>
           <Text style={styles.emptyBody}>Your purchases show here, newest first.</Text>
           <Pressable onPress={() => router.push('/add')} accessibilityRole="button" accessibilityLabel="Add expense"
-            style={{ minHeight: 48, borderRadius: radius.md, backgroundColor: c.accent, alignItems: 'center', justifyContent: 'center', paddingHorizontal: spacing[6], marginTop: spacing[3] }}>
-            <Text style={{ color: c.onAccent, fontSize: 16, fontWeight: '600' }}>Add expense</Text>
+            style={{ minHeight: rem(3), borderRadius: radius.md, backgroundColor: c.accent, alignItems: 'center', justifyContent: 'center', paddingHorizontal: spacing[6], marginTop: spacing[3] }}>
+            <Text style={{ color: c.onAccent, fontSize: font(1), fontWeight: '600' }}>Add expense</Text>
           </Pressable>
           <Pressable onPress={async () => { await seedDemoData(); setExpenses(await loadExpenses()); }} accessibilityRole="button" accessibilityLabel="Load demo data"
-            style={{ minHeight: 48, borderRadius: radius.md, borderWidth: 1, borderColor: c.cardBorder, backgroundColor: c.surface, alignItems: 'center', justifyContent: 'center', paddingHorizontal: spacing[6], marginTop: spacing[2] }}>
-            <Text style={{ color: c.textPrimary, fontSize: 16, fontWeight: '600' }}>Load demo data</Text>
+            style={{ minHeight: rem(3), borderRadius: radius.md, borderWidth: 1, borderColor: c.cardBorder, backgroundColor: c.surface, alignItems: 'center', justifyContent: 'center', paddingHorizontal: spacing[6], marginTop: spacing[2] }}>
+            <Text style={{ color: c.textPrimary, fontSize: font(1), fontWeight: '600' }}>Load demo data</Text>
           </Pressable>
         </View>
       ) : filtered.length === 0 ? (
@@ -175,7 +176,7 @@ export default function Activity() {
         <View style={{ marginTop: spacing[6] }}>
           <Pressable onPress={() => setShowDeleted((v) => !v)} accessibilityRole="button"
             accessibilityLabel={`${showDeleted ? 'Hide' : 'Show'} deleted purchases, ${deleted.length}`}
-            style={{ minHeight: 44, justifyContent: 'center' }}>
+            style={{ minHeight: rem(2.75), justifyContent: 'center' }}>
             <Text style={{ color: c.accent, fontWeight: '600' }}>
               {showDeleted ? 'Hide' : 'Show'} deleted ({deleted.length}) · kept in history
             </Text>
@@ -184,10 +185,10 @@ export default function Activity() {
             <View key={e.id} style={{ flexDirection: 'row', alignItems: 'center', gap: spacing[3], backgroundColor: c.surface, borderWidth: 1, borderColor: c.cardBorder, borderRadius: radius.md, padding: spacing[3], marginTop: spacing[2] }}>
               <View style={{ flex: 1 }}>
                 <Text style={{ color: c.textSecondary, textDecorationLine: 'line-through' }}>{e.name} · {formatUSD(e.amount)}</Text>
-                <Text style={{ color: c.textTertiary, fontSize: 12 }}>Deleted {new Date(e.deletedAt as string).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</Text>
+                <Text style={{ color: c.textTertiary, fontSize: font(0.75) }}>Deleted {new Date(e.deletedAt as string).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</Text>
               </View>
               <Pressable onPress={() => handleRestore(e.id)} accessibilityRole="button" accessibilityLabel={`Restore ${e.name}`}
-                style={{ minHeight: 44, justifyContent: 'center', paddingHorizontal: spacing[2] }}>
+                style={{ minHeight: rem(2.75), justifyContent: 'center', paddingHorizontal: spacing[2] }}>
                 <Text style={{ color: c.accent, fontWeight: '600' }}>Restore</Text>
               </Pressable>
             </View>

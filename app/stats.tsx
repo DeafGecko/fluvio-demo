@@ -1,9 +1,10 @@
 import { BackLink } from '../components/settings-ui';
 import { useFocusEffect, useRouter } from 'expo-router';
 import { useCallback, useMemo, useState } from 'react';
-import { Dimensions, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { Dimensions, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { BottomSheet } from '../components/bottom-sheet';
 import { PieChart } from 'react-native-chart-kit';
-import { minTarget, radius, screenInset, spacing } from '../constants/tokens';
+import { minTarget, radius, screenInset, spacing, rem } from '../constants/tokens';
 import { useTheme } from '../hooks/use-theme';
 import { Expense, formatUSD, loadExpenses, sumExpenses, totalsByCategory } from '../lib/expenses';
 import { currentMonthShort } from '../lib/subscriptions';
@@ -16,10 +17,18 @@ export default function Stats() {
   const { c, t, cat: catColor } = useTheme();
   const [expenses, setExpenses] = useState<Expense[]>([]);
   useFocusEffect(useCallback(() => { loadExpenses().then(setExpenses); }, []));
+  // Tapping a category row opens the purchases in that category.
+  const [catSheetOpen, setCatSheetOpen] = useState(false);
+  const [openCat, setOpenCat] = useState('');
+  // A tapped day opens that day's purchases instead of a category.
+  const [openDay, setOpenDay] = useState('');
 
   // This month only, so the total matches Home and Insights.
   const monthName = new Date().toLocaleDateString('en-US', { month: 'long' });
   const monthExpenses = expenses.filter((e) => !e.deletedAt && e.date.split(' ')[0] === currentMonthShort());
+  const openPurchases = openDay
+    ? monthExpenses.filter((e) => e.date === openDay)
+    : monthExpenses.filter((e) => e.category === openCat);
   const total = sumExpenses(monthExpenses);
   const categoryTotals = totalsByCategory(monthExpenses);
   const sortedCategories = Object.entries(categoryTotals).sort((a, b) => b[1] - a[1]);
@@ -46,12 +55,16 @@ export default function Stats() {
     rowHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: spacing[2] },
     rowName: { color: c.textPrimary, fontSize: t.bodyStrong.fontSize, fontWeight: t.bodyStrong.fontWeight },
     rowValue: { color: c.textPrimary, fontSize: t.bodyStrong.fontSize, fontWeight: t.bodyStrong.fontWeight, fontVariant: ['tabular-nums'] },
-    rowMeta: { color: c.textSecondary, fontSize: t.caption.fontSize, marginTop: 2 },
-    barBg: { height: 8, backgroundColor: c.surfaceMuted, borderRadius: radius.pill, overflow: 'hidden' },
-    barFill: { height: 8, borderRadius: radius.pill },
+    rowMeta: { color: c.textSecondary, fontSize: t.caption.fontSize, marginTop: rem(0.125) },
+    barBg: { height: rem(0.5), backgroundColor: c.surfaceMuted, borderRadius: radius.pill, overflow: 'hidden' },
+    barFill: { height: rem(0.5), borderRadius: radius.pill },
     empty: { alignItems: 'center', paddingVertical: spacing[10], gap: spacing[2] },
     emptyTitle: { color: c.textPrimary, fontSize: t.h3.fontSize, fontWeight: t.h3.fontWeight },
     emptyBody: { color: c.textSecondary, fontSize: t.secondary.fontSize, lineHeight: t.secondary.lineHeight, textAlign: 'center' },
+    purchase: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingVertical: spacing[3], borderBottomWidth: 1, borderBottomColor: c.cardBorder },
+    purchaseName: { color: c.textPrimary, fontSize: t.bodyStrong.fontSize, fontWeight: t.bodyStrong.fontWeight },
+    purchaseMeta: { color: c.textSecondary, fontSize: t.caption.fontSize, marginTop: rem(0.125) },
+    purchaseAmt: { color: c.textPrimary, fontSize: t.bodyStrong.fontSize, fontWeight: t.bodyStrong.fontWeight, fontVariant: ['tabular-nums'] },
   }), [c, t]);
 
   return (
@@ -69,7 +82,7 @@ export default function Stats() {
       ) : (
         <>
           <View style={styles.card} accessible={false}>
-            <PieChart data={pieData} width={W - screenInset * 2 - spacing[6]} height={160}
+            <PieChart data={pieData} width={W - screenInset * 2 - spacing[6]} height={rem(10)}
               chartConfig={{ color: (o = 1) => `rgba(23,35,30,${o})`, backgroundColor: c.surface, backgroundGradientFrom: c.surface, backgroundGradientTo: c.surface }}
               accessor="amount" backgroundColor="transparent" paddingLeft="10" absolute={false} />
           </View>
@@ -80,7 +93,9 @@ export default function Stats() {
               const share = total > 0 ? (amount / total) * 100 : 0;
               const color = catColor[category] ?? '#94a3b8';
               return (
-                <View key={category} style={styles.row} accessible accessibilityRole="listitem"
+                <Pressable key={category} style={styles.row} accessibilityRole="button"
+                  accessibilityHint={`Opens the ${category} purchases this month`}
+                  onPress={() => { setOpenDay(''); setOpenCat(category); setCatSheetOpen(true); }}
                   accessibilityLabel={`${category}: ${formatUSD(amount)}, ${share.toFixed(0)} percent of total logged`}>
                   <View style={styles.rowHeader}>
                     <Text style={styles.rowName}>{category}</Text>
@@ -90,7 +105,7 @@ export default function Stats() {
                     <View style={[styles.barFill, { width: `${share}%`, backgroundColor: color }]} />
                   </View>
                   <Text style={styles.rowMeta}>{share.toFixed(0)}% of total logged</Text>
-                </View>
+                </Pressable>
               );
             })}
           </View>
@@ -98,7 +113,9 @@ export default function Stats() {
           <Text style={[styles.sectionTitle, { marginTop: spacing[6] }]} accessibilityRole="header">By day</Text>
           <View accessibilityRole="list">
             {sortedDays.map(([date, amount]) => (
-              <View key={date} style={styles.row} accessible accessibilityRole="listitem"
+              <Pressable key={date} style={styles.row} accessibilityRole="button"
+                accessibilityHint={`Opens the purchases on ${date}`}
+                onPress={() => { setOpenDay(date); setCatSheetOpen(true); }}
                 accessibilityLabel={`${date}: ${formatUSD(amount)}`}>
                 <View style={styles.rowHeader}>
                   <Text style={styles.rowName}>{date}</Text>
@@ -107,11 +124,29 @@ export default function Stats() {
                 <View style={styles.barBg}>
                   <View style={[styles.barFill, { width: `${(amount / maxDaily) * 100}%`, backgroundColor: c.accent }]} />
                 </View>
-              </View>
+              </Pressable>
             ))}
           </View>
         </>
       )}
+
+      <BottomSheet visible={catSheetOpen} onClose={() => setCatSheetOpen(false)}
+        title={openDay ? openDay : `${openCat} this month`} height={0.7}>
+        {openPurchases.length === 0 ? (
+          <Text style={styles.emptyBody}>{openDay ? `No purchases on ${openDay}.` : `No ${openCat.toLowerCase()} purchases this month.`}</Text>
+        ) : (
+          openPurchases.map((e) => (
+            <View key={e.id} style={styles.purchase}>
+              <View style={{ width: rem(0.5), height: rem(0.5), borderRadius: rem(0.25), backgroundColor: catColor[e.category] ?? c.textTertiary, marginRight: spacing[3] }} />
+              <View style={{ flex: 1, paddingRight: spacing[3] }}>
+                <Text style={styles.purchaseName}>{e.name}</Text>
+                <Text style={styles.purchaseMeta}>{e.date}{e.note ? ` · ${e.note}` : ''}</Text>
+              </View>
+              <Text style={styles.purchaseAmt}>{formatUSD(e.amount)}</Text>
+            </View>
+          ))
+        )}
+      </BottomSheet>
     </ScrollView>
   );
 }

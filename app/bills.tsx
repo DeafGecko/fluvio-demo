@@ -2,7 +2,7 @@ import { useFocusEffect, useRouter } from 'expo-router';
 import { useCallback, useMemo, useState } from 'react';
 import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { BackLink } from '../components/settings-ui';
-import { radius, screenInset, spacing } from '../constants/tokens';
+import { compactTextScale, radius, screenInset, spacing, rem, font } from '../constants/tokens';
 import { useTheme } from '../hooks/use-theme';
 import { Expense, formatUSD, loadExpenses } from '../lib/expenses';
 
@@ -39,18 +39,18 @@ export default function Bills() {
     screen: { flex: 1, backgroundColor: c.canvas },
     content: { paddingHorizontal: screenInset, paddingTop: spacing[16], paddingBottom: spacing[12] },
     heading: { color: c.textPrimary, fontSize: t.h1.fontSize, fontWeight: t.h1.fontWeight, lineHeight: t.h1.lineHeight, marginTop: spacing[2] },
-    total: { backgroundColor: c.surface, borderRadius: 18, padding: spacing[4], marginTop: spacing[4], borderWidth: 1, borderColor: c.cardBorder },
+    total: { backgroundColor: c.surface, borderRadius: rem(1.125), padding: spacing[4], marginTop: spacing[4], borderWidth: 1, borderColor: c.cardBorder },
     label: { color: c.textSecondary, fontSize: t.caption.fontSize, fontWeight: '600' },
     amount: { color: c.textPrimary, fontSize: t.h2.fontSize, fontWeight: '700' },
     card: { backgroundColor: c.surface, borderRadius: radius.md, borderWidth: 1, borderColor: c.cardBorder, padding: spacing[4], marginTop: spacing[2] },
     name: { color: c.textPrimary, fontSize: t.bodyStrong.fontSize, fontWeight: '600' },
-    meta: { color: c.textSecondary, fontSize: t.caption.fontSize, marginTop: 2 },
+    meta: { color: c.textSecondary, fontSize: t.caption.fontSize, marginTop: rem(0.125) },
     amt: { color: c.textPrimary, fontSize: t.bodyStrong.fontSize, fontWeight: '600', marginTop: spacing[1] },
-    button: { minHeight: 52, borderRadius: 14, backgroundColor: c.accent, alignItems: 'center', justifyContent: 'center', marginTop: spacing[6] },
-    buttonLabel: { color: c.onAccent, fontSize: 17, fontWeight: '600' },
+    button: { minHeight: rem(3.25), borderRadius: rem(0.875), backgroundColor: c.accent, alignItems: 'center', justifyContent: 'center', marginTop: spacing[6], paddingVertical: spacing[2] },
+    buttonLabel: { color: c.onAccent, fontSize: font(1.0625), fontWeight: '600' },
     empty: { color: c.textSecondary, fontSize: t.body.fontSize, marginTop: spacing[4] },
-    tabs: { flexDirection: 'row', backgroundColor: c.surface, borderWidth: 1, borderColor: c.cardBorder, borderRadius: 14, padding: 3, marginTop: spacing[4] },
-    tab: { flex: 1, minHeight: 40, borderRadius: 11, alignItems: 'center', justifyContent: 'center' },
+    tabs: { flexDirection: 'row', backgroundColor: c.surface, borderWidth: 1, borderColor: c.cardBorder, borderRadius: rem(0.875), padding: rem(0.1875), marginTop: spacing[4] },
+    tab: { flex: 1, minHeight: rem(2.5), borderRadius: rem(0.6875), alignItems: 'center', justifyContent: 'center', paddingHorizontal: spacing[2] },
     tabOn: { backgroundColor: c.accentSoft },
     tabLabel: { color: c.textSecondary, fontSize: t.secondary.fontSize, fontWeight: '600' },
     tabLabelOn: { color: c.textPrimary },
@@ -73,7 +73,7 @@ export default function Bills() {
           return (
             <Pressable key={key} onPress={() => setTab(key)} accessibilityRole="tab" accessibilityState={{ selected: on }}
               aria-selected={on} style={[styles.tab, on && styles.tabOn]}>
-              <Text style={[styles.tabLabel, on && styles.tabLabelOn]}>{key === 'upcoming' ? 'Upcoming' : 'Recurring'}</Text>
+              <Text style={[styles.tabLabel, on && styles.tabLabelOn]} numberOfLines={1} adjustsFontSizeToFit maxFontSizeMultiplier={compactTextScale}>{key === 'upcoming' ? 'Upcoming' : 'Recurring'}</Text>
             </Pressable>
           );
         })}

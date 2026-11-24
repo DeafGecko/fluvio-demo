@@ -4,6 +4,7 @@ import { useEffect } from 'react';
 import { ArrowsRightLeftIcon, ChartBarIcon, HomeIcon, WalletIcon } from 'react-native-heroicons/outline';
 import { FluvioTabBar } from '../../components/fluvio-tab-bar';
 import { useTheme } from '../../hooks/use-theme';
+import { rem } from '../../constants/tokens';
 
 // The four primary tabs. Profile, Settings, Sign In, and other screens sit above the tabs in the root stack.
 export default function TabsLayout() {
@@ -17,12 +18,12 @@ export default function TabsLayout() {
   return (
     <Tabs
       tabBar={(props) => <FluvioTabBar {...props} />}
-      screenOptions={{ headerShown: false, tabBarActiveTintColor: c.accent, tabBarInactiveTintColor: c.textTertiary }}
+      screenOptions={{ headerShown: false, tabBarActiveTintColor: c.accent, tabBarInactiveTintColor: c.textTertiary, sceneStyle: { backgroundColor: c.canvas } }}
     >
-      <Tabs.Screen name="index" options={{ tabBarLabel: 'Home', tabBarIcon: ({ color }) => <HomeIcon size={22} color={color} /> }} />
-      <Tabs.Screen name="activity" options={{ tabBarLabel: 'Activity', tabBarIcon: ({ color }) => <ArrowsRightLeftIcon size={22} color={color} /> }} />
-      <Tabs.Screen name="insights" options={{ tabBarLabel: 'Insights', tabBarIcon: ({ color }) => <ChartBarIcon size={22} color={color} /> }} />
-      <Tabs.Screen name="accounts" options={{ tabBarLabel: 'Accounts', tabBarIcon: ({ color }) => <WalletIcon size={22} color={color} /> }} />
+      <Tabs.Screen name="index" options={{ tabBarLabel: 'Home', tabBarIcon: ({ color }) => <HomeIcon size={rem(1.375)} color={color} /> }} />
+      <Tabs.Screen name="activity" options={{ tabBarLabel: 'Activity', tabBarIcon: ({ color }) => <ArrowsRightLeftIcon size={rem(1.375)} color={color} /> }} />
+      <Tabs.Screen name="insights" options={{ tabBarLabel: 'Insights', tabBarIcon: ({ color }) => <ChartBarIcon size={rem(1.375)} color={color} /> }} />
+      <Tabs.Screen name="accounts" options={{ tabBarLabel: 'Accounts', tabBarIcon: ({ color }) => <WalletIcon size={rem(1.375)} color={color} /> }} />
     </Tabs>
   );
 }

@@ -4,7 +4,7 @@ import { Alert, Platform, ScrollView, StyleSheet, Text, View } from 'react-nativ
 import { BuildingLibraryIcon, PencilSquareIcon, ShieldCheckIcon, TrashIcon } from 'react-native-heroicons/outline';
 import { BackLink, SettingsGroup, SettingsRow } from '../components/settings-ui';
 import { SavedPopout } from '../components/saved-popout';
-import { radius, screenInset, spacing } from '../constants/tokens';
+import { radius, screenInset, spacing, font } from '../constants/tokens';
 import { useTheme } from '../hooks/use-theme';
 import {
   DemoAccount, loadDemoAccounts, removeDemoAccount, renameDemoAccount, setDemoShowOnHome,
@@ -57,7 +57,7 @@ export default function AccountSettings() {
     content: { paddingHorizontal: screenInset, paddingTop: spacing[16], paddingBottom: spacing[12] },
     heading: { color: c.textPrimary, fontSize: t.h1.fontSize, fontWeight: t.h1.fontWeight, lineHeight: t.h1.lineHeight, marginTop: spacing[2], marginBottom: spacing[2] },
     sub: { color: c.textSecondary, fontSize: t.secondary.fontSize, marginBottom: spacing[4] },
-    group: { color: c.textSecondary, fontSize: t.caption.fontSize, fontWeight: '600', letterSpacing: 0.6, marginTop: spacing[2], marginBottom: spacing[2], textTransform: 'uppercase' },
+    group: { color: c.textSecondary, fontSize: t.caption.fontSize, fontWeight: '600', letterSpacing: font(0.0375), marginTop: spacing[2], marginBottom: spacing[2], textTransform: 'uppercase' },
     note: { backgroundColor: c.accentSoft, borderRadius: radius.lg, padding: spacing[4], marginTop: spacing[2] },
     noteText: { color: c.textPrimary, fontSize: t.secondary.fontSize, lineHeight: t.secondary.lineHeight },
   }), [c, t]);
@@ -65,7 +65,7 @@ export default function AccountSettings() {
   return (
     <ScrollView style={styles.screen} contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
       <SavedPopout visible={savedOpen} message="Saved" />
-      <BackLink label="Profile" onPress={() => router.back()} />
+      <BackLink label="Profile" onPress={() => router.replace('/')} />
       <Text style={styles.heading} accessibilityRole="header">Account settings</Text>
       <Text style={styles.sub}>Demo accounts only.</Text>
 

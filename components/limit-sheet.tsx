@@ -1,8 +1,9 @@
 import { useMemo, useState } from 'react';
 import { Alert, Pressable, Text, View } from 'react-native';
-import { radius, spacing } from '../constants/tokens';
+import { radius, spacing, rem, font } from '../constants/tokens';
 import { useTheme } from '../hooks/use-theme';
 import { parseAmount } from '../lib/amount';
+import { recordSave, trackUse } from '../lib/usage';
 import { BottomSheet } from './bottom-sheet';
 
 // The monthly limit sheet. It uses an on-screen keypad, so typing works on the phone without
@@ -21,14 +22,14 @@ export function LimitSheet({ visible, onClose, current, onSave }: {
 
   const styles = useMemo(() => ({
     note: { color: c.textSecondary, fontSize: t.secondary.fontSize, lineHeight: t.secondary.lineHeight, marginBottom: spacing[3] },
-    display: { flexDirection: 'row' as const, alignItems: 'center' as const, justifyContent: 'center' as const, minHeight: 56, borderRadius: radius.md, borderWidth: 1, borderColor: c.cardBorder, backgroundColor: c.surface, marginBottom: spacing[3] },
+    display: { flexDirection: 'row' as const, alignItems: 'center' as const, justifyContent: 'center' as const, minHeight: rem(3.5), borderRadius: radius.md, borderWidth: 1, borderColor: c.cardBorder, backgroundColor: c.surface, marginBottom: spacing[3] },
     dollar: { color: c.textPrimary, fontSize: t.h2.fontSize, fontWeight: '700' as const, marginRight: spacing[1] },
     amount: { color: c.textPrimary, fontSize: t.h2.fontSize, fontWeight: '700' as const },
     keys: { flexDirection: 'row' as const, flexWrap: 'wrap' as const, justifyContent: 'space-between' as const },
-    key: { width: '31%' as const, height: 50, borderRadius: radius.md, backgroundColor: c.surfaceMuted, alignItems: 'center' as const, justifyContent: 'center' as const, marginBottom: spacing[2] },
+    key: { width: '31%' as const, height: rem(3.125), borderRadius: radius.md, backgroundColor: c.surfaceMuted, alignItems: 'center' as const, justifyContent: 'center' as const, marginBottom: spacing[2] },
     keyText: { color: c.textPrimary, fontSize: t.h3.fontSize, fontWeight: '600' as const },
-    save: { minHeight: 52, borderRadius: 14, backgroundColor: c.accent, alignItems: 'center' as const, justifyContent: 'center' as const, marginTop: spacing[2] },
-    saveLabel: { color: c.onAccent, fontSize: 17, fontWeight: '600' as const },
+    save: { minHeight: rem(3.25), borderRadius: rem(0.875), backgroundColor: c.accent, alignItems: 'center' as const, justifyContent: 'center' as const, marginTop: spacing[2] },
+    saveLabel: { color: c.onAccent, fontSize: font(1.0625), fontWeight: '600' as const },
     pressed: { opacity: 0.8 },
   }), [c, t]);
 
@@ -41,12 +42,14 @@ export function LimitSheet({ visible, onClose, current, onSave }: {
   const save = () => {
     const v = parseAmount(draft);
     if (v === null || v <= 0) { Alert.alert('Check the limit', 'Enter an amount greater than zero, up to 1,000,000.'); return; }
+    trackUse('save:monthly-limit');
+    recordSave('Monthly limit');
     onSave(v);
     onClose();
   };
 
   return (
-    <BottomSheet visible={visible} onClose={onClose} title="Monthly limit" height={0.7}>
+    <BottomSheet visible={visible} onClose={onClose} title="Monthly limit" height={rem(0.0437)}>
       <Text style={styles.note}>Set how much you plan to spend this month. Left to spend counts down from this number.</Text>
       <View style={styles.display} accessibilityLabel={`Monthly limit ${draft || '0'} dollars`} accessibilityRole="text">
         <Text style={styles.dollar}>$</Text>

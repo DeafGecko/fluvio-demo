@@ -1,6 +1,6 @@
 # Fluvio — a learning project for building a mobile app
 
-Fluvio is a demo expense tracker for iPhone (and Android) that I built to learn how to take an app from an idea to working code. Every screen starts as a sketch, becomes a design in Figma, and then gets built in code with React Native and Expo.
+Fluvio is a completed demo expense tracker for iPhone (and Android) that I built to learn how to take an app from an idea to working code. Every screen starts as a sketch, becomes a design in Figma, and then gets built in code with React Native and Expo.
 
 Everything in the app is fictional. The banks, accounts, names, and amounts are made up, and no real bank is connected.
 
@@ -61,9 +61,43 @@ npx expo start
 
 Press `i` to open the iPhone simulator, or scan the QR code with Expo Go on a phone.
 
-## Limits and what is not done yet
+To run the tests and the type check:
+
+```bash
+npx vitest run     # unit tests (20 tests)
+npx tsc --noEmit   # type check
+```
+
+GitHub runs the unit tests and a security audit on every push (`.github/workflows/security.yml`).
+
+## Website demo
+
+The same app runs in a browser. The website shows a landing page with the Fluvio name, a short description, Mobile and Tablet buttons, and a QR code. The app appears in a phone frame next to it, and on phones the frame sits under the text.
+
+- **Live site:** [fluvio-demo.netlify.app](https://fluvio-demo.netlify.app/)
+- **Landing page:** `web-demo/index.html`. The app itself lives at `web-demo/app.html`, and the page inside the phone frame loads `/splash`.
+- **Netlify:** `netlify.toml` publishes the `web-demo` folder as-is, with no build command. Netlify reads `web-demo/_headers` (security headers) and `web-demo/_redirects` (routes).
+- **Rebuild the web app** after code changes:
+
+  ```bash
+  npx expo export --platform web --output-dir /tmp/fluvio-web
+  ```
+
+  Then copy `_expo` and `assets` into `web-demo`, and point the script tags in `web-demo/app.html` at the new file names (the names change with each build). Keep `index.html`, `demo.html`, `demo.js`, `boot.js`, `theme-init.js`, `_headers`, and `_redirects`, because the export does not create them.
+- **Home screen:** the web app includes a manifest and icons, so a phone can save it to the home screen and open it full screen.
+- **Theme:** the app starts in light mode. Settings → Appearance can switch to dark or back to the phone's setting. The page reads that saved choice before it first paints, so the phone does not flash the wrong theme.
+
+## Documentation
+
+The notes in `docs/` stay on this computer. The folder is listed in `.gitignore`, so it is not on GitHub. The main files are `docs/SECURITY-NOTES.md` (what was checked and what is still open) and `docs/FLUVIO-IMPLEMENTATION.md`.
+
+## Limits and known gaps
+
+The demo is complete. These are the known gaps, kept on purpose or left for later:
 
 - Savings goals are not built yet.
-- The AI tips feature calls an AI service directly from the app. That isn't safe to publish. The key needs to move to a server before anyone else uses it.
+- The AI tips feature is switched off. The app no longer calls an AI service directly, so no key ships in the app. Turning it back on needs a server to hold the key.
 - Some features only work on iPhone, such as renaming with a prompt.
 - Bank connection is pretend. Nothing connects to a real account.
+- The GitHub security check fails on the `npm ci` step because of a dependency mismatch in Expo's dev tools (`@expo/ws-tunnel` needs `ws` 8, but the lockfile pins 7). The Netlify site is not affected.
+- Data is stored unencrypted on the device. This is accepted for a demo with fictional data only.
